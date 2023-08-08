@@ -52,7 +52,7 @@ class Controller extends BaseController
      * @access protected
      * @return string
      */
-    protected function getResponseType()
+    protected function getResponseType(): string
     {
         if (!$this->app) {
             $this->app = Container::get('app');

@@ -3,13 +3,13 @@
 
 namespace app\common\controller;
 
-use app\BaseController;
+use app\Controller;
 
 /**
  * 项目公共控制器
  * @package app\common\controller
  */
-class Common extends BaseController
+class Common extends Controller
 {
     /**
      * 初始化

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\controller;
+namespace app\index\controller;
 
 /**
  * 插件控制器

@@ -63,7 +63,7 @@ class Controller extends BaseController
 
         return $isAjax
             ? "json"
-            : $config->get('url_html_suffix');
+            : "html";
     }
 
     /**

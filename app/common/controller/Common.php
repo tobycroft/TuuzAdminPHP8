@@ -3,7 +3,7 @@
 
 namespace app\common\controller;
 
-use think\Controller;
+use app\BaseController as Controller;
 
 /**
  * 项目公共控制器

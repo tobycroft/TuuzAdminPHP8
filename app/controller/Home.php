@@ -4,6 +4,7 @@
 namespace app\controller;
 
 use app\common\controller\Common;
+use think\facade\Config;
 
 /**
  * 前台公共控制器
@@ -17,8 +18,10 @@ class Home extends Common
     protected function initialize()
     {
         // 系统开关
-        if (!config_old('web_site_status')) {
-            $this->error('站点已经关闭，请稍后访问~');
-        }
+//        if (!config_old('web_site_status')) {
+//            $this->error('站点已经关闭，请稍后访问~');
+//        }
+        echo json_encode(Config::get('tp'),320);
+        exit();
     }
 }

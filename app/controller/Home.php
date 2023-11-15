@@ -21,7 +21,7 @@ class Home extends Common
 //        if (!config_old('web_site_status')) {
 //            $this->error('站点已经关闭，请稍后访问~');
 //        }
-        echo json_encode(Config::get('tp'),320);
+        echo json_encode(Config::get('tp.'),320);
         exit();
     }
 }

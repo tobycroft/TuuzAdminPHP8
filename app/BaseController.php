@@ -3,10 +3,12 @@ declare (strict_types=1);
 
 namespace app;
 
+use liliuwei\think\Jump;
 use think\App;
 use think\exception\ValidateException;
+use think\facade\Config;
+use think\facade\Db;
 use think\Validate;
-use liliuwei\think\Jump;
 
 /**
  * 控制器基础类
@@ -49,7 +51,8 @@ abstract class BaseController
     {
         $this->app = $app;
         $this->request = $this->app->request;
-
+        $config = Db::name('dp_admin_config')->column('value', 'name');
+        Config::set($config, '');
         // 控制器初始化
         $this->initialize();
     }

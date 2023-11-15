@@ -1504,5 +1504,5 @@ if (!function_exists('dp_send_message')) {
 
 function config($key)
 {
-    Config::get($key);
+    return Config::get($key);
 }

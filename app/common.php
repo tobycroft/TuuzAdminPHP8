@@ -4,6 +4,7 @@
 use app\user\model\User;
 use think\Container;
 use think\Db;
+use think\facade\Config;
 use think\facade\Env;
 
 
@@ -1499,4 +1500,9 @@ if (!function_exists('dp_send_message')) {
         $MessageModel = model('user/message');
         return false !== $MessageModel->saveAll($list);
     }
+}
+
+function config($key)
+{
+    Config::get($key);
 }

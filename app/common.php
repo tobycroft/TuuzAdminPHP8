@@ -1505,6 +1505,6 @@ if (!function_exists('dp_send_message')) {
 function config_old($key)
 {
     return array_merge(Config::get('app.'),
-        Config::get('tp.' . $key)
-    );
+        Config::get('tp.')
+    )[$key];
 }

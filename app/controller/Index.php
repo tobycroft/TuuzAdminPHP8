@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\index\controller;
+namespace app\controller;
 
 /**
  * 前台首页控制器

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\index\controller;
+namespace app\controller;
 
 use app\common\controller\Common;
 

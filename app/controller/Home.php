@@ -18,7 +18,7 @@ class Home extends Common
     {
         // 系统开关
         if (!config('web_site_status')) {
-            var_dump(config('web_site_status'));
+            var_dump(config());
             exit();
         }
         echo "123";

@@ -16,7 +16,6 @@ namespace app;
 
 use think\Container;
 use think\exception\HttpResponseException;
-use think\facade\Config;
 use think\Response;
 use think\response\Redirect;
 
@@ -165,7 +164,7 @@ trait Jump
         $isAjax = $this->app['request']->isAjax();
 //        $config = $this->app['config'];
         return $isAjax
-            ? Config::get('default_ajax_return')
-            : Config::get('default_return_type');
+            ? 'json'
+            : 'html';
     }
 }

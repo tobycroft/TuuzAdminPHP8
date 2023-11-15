@@ -115,7 +115,7 @@ class Menu extends Model
         $menus = cache($cache_tag);
         if (!$menus) {
             // 非开发模式，只显示可以显示的菜单
-            if (config('develop_mode') == 0) {
+            if (config_old('develop_mode') == 0) {
                 $map['online_hide'] = 0;
             }
             $map['status'] = 1;
@@ -143,7 +143,7 @@ class Menu extends Model
                 $i++;
             }
             // 非开发模式，缓存菜单
-            if (config('develop_mode') == 0) {
+            if (config_old('develop_mode') == 0) {
                 cache($cache_tag, $menus);
             }
         }
@@ -174,7 +174,7 @@ class Menu extends Model
                 'status' => 1
             ];
             // 非开发模式，只显示可以显示的菜单
-            if (config('develop_mode') == 0) {
+            if (config_old('develop_mode') == 0) {
                 $map['online_hide'] = 0;
             }
             $menus = self::where($map)
@@ -195,7 +195,7 @@ class Menu extends Model
             $menus = Tree::toLayer($menus, $top_id, 2);
 
             // 非开发模式，缓存菜单
-            if (config('develop_mode') == 0) {
+            if (config_old('develop_mode') == 0) {
                 cache($cache_tag, $menus);
             }
         }
@@ -247,7 +247,7 @@ class Menu extends Model
             }
 
             // 非开发模式，缓存菜单
-            if (config('develop_mode') == 0) {
+            if (config_old('develop_mode') == 0) {
                 cache($cache_name, $location);
             }
         }

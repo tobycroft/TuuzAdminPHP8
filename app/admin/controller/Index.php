@@ -37,7 +37,7 @@ class Index extends Admin
      */
     public function wipeCache()
     {
-        $wipe_cache_type = config('wipe_cache_type');
+        $wipe_cache_type = config_old('wipe_cache_type');
         if (!empty($wipe_cache_type)) {
             foreach ($wipe_cache_type as $item) {
                 switch ($item) {

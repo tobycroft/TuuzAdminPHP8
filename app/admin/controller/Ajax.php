@@ -222,7 +222,7 @@ class Ajax extends Common
             ];
             return json($data);
         }
-        $Aoss = new Aoss(config('upload_prefix'), 'complete');
+        $Aoss = new Aoss(config_old('upload_prefix'), 'complete');
         $md5_data = $Aoss->md5($md5);
         if ($md5_data->isSuccess()) {
             $file_info = [

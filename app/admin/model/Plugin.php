@@ -34,8 +34,8 @@ class Plugin extends Model
         $result = cache('plugin_all');
         if (!$result) {
             // 获取插件目录下的所有插件目录
-            $dirs = array_map('basename', glob(config('plugin_path') . '*', GLOB_ONLYDIR));
-            if ($dirs === false || !file_exists(config('plugin_path'))) {
+            $dirs = array_map('basename', glob(config_old('plugin_path') . '*', GLOB_ONLYDIR));
+            if ($dirs === false || !file_exists(config_old('plugin_path'))) {
                 $this->error = '插件目录不可读或者不存在';
                 return false;
             }
@@ -186,7 +186,7 @@ class Plugin extends Model
 
             $result = ['total' => $total, 'plugins' => $plugins];
             // 非开发模式，缓存数据
-            if (config('develop_mode') == 0) {
+            if (config_old('develop_mode') == 0) {
                 cache('plugin_all', $result);
             }
         }
@@ -227,7 +227,7 @@ class Plugin extends Model
 
             $config = json_decode($config, true);
             // 非开发模式，缓存数据
-            if (config('develop_mode') == 0) {
+            if (config_old('develop_mode') == 0) {
                 cache('plugin_config_' . $name, $config);
             }
         }
@@ -293,7 +293,7 @@ class Plugin extends Model
         }
 
         // 非开发模式，缓存数据
-        if (config('develop_mode') == 0) {
+        if (config_old('develop_mode') == 0) {
             cache('plugin_config_' . $name, $config);
         }
 

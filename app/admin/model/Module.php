@@ -30,7 +30,7 @@ class Module extends Model
                 ->order('id')
                 ->column('name,title');
             // 非开发模式，缓存数据
-            if (config('develop_mode') == 0) {
+            if (config_old('develop_mode') == 0) {
                 cache('modules', $modules);
             }
         }
@@ -57,7 +57,7 @@ class Module extends Model
 
             $config = json_decode($config, true);
             // 非开发模式，缓存数据
-            if (config('develop_mode') == 0) {
+            if (config_old('develop_mode') == 0) {
                 cache('module_config_' . $name, $config);
             }
         }
@@ -123,7 +123,7 @@ class Module extends Model
         }
 
         // 非开发模式，缓存数据
-        if (config('develop_mode') == 0) {
+        if (config_old('develop_mode') == 0) {
             cache('module_config_' . $name, $config);
         }
 
@@ -162,7 +162,7 @@ class Module extends Model
             }
 
             // 不读取模块信息的目录
-            $except_module = config('system.except_module');
+            $except_module = config_old('system.except_module');
             // 正常模块(包括已安装和未安装)
             $dirs = array_diff($dirs, $except_module);
 
@@ -293,7 +293,7 @@ class Module extends Model
 
             $result = ['total' => $total, 'modules' => $modules];
             // 非开发模式，缓存数据
-            if (config('develop_mode') == 0) {
+            if (config_old('develop_mode') == 0) {
                 cache('module_all', $result);
             }
         }

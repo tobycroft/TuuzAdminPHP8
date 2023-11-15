@@ -92,7 +92,7 @@ if (!function_exists('get_file_path')) {
             if (!empty($id) && strtolower($id) != 'null') {
                 return $id;
             }
-            return config('public_static_path') . 'admin/img/none.png';
+            return config_old('public_static_path') . 'admin/img/none.png';
         }
         return $path;
     }
@@ -124,7 +124,7 @@ if (!function_exists('get_thumb')) {
             if (!empty($id) && strtolower($id) != 'null') {
                 return $id;
             }
-            return config('public_static_path') . 'admin/img/none.png';
+            return config_old('public_static_path') . 'admin/img/none.png';
         }
         return $path;
     }
@@ -142,7 +142,7 @@ if (!function_exists('get_avatar')) {
         $avatar = Db::name('admin_user')->where('id', $uid)->value('avatar');
         $path = model('admin/attachment')->getFilePath($avatar);
         if (!$path) {
-            return config('public_static_path') . 'admin/img/avatar.jpg';
+            return config_old('public_static_path') . 'admin/img/avatar.jpg';
         }
         return $path;
     }
@@ -186,7 +186,7 @@ if (!function_exists('minify')) {
                 $url .= 'b=' . $files;
                 break;
         }
-        echo $url . '&v=' . config('asset_version');
+        echo $url . '&v=' . config_old('asset_version');
     }
 }
 
@@ -1010,7 +1010,7 @@ if (!function_exists('get_nickname')) {
                 $name = $list[$key] = $nickname;
                 /* 缓存用户 */
                 $count = count($list);
-                $max = config('user_max_cache');
+                $max = config_old('user_max_cache');
                 while ($count-- > $max) {
                     array_shift($list);
                 }
@@ -1037,7 +1037,7 @@ if (!function_exists('action_log')) {
     function action_log($action = null, $model = null, $record_id = '', $user_id = null, $details = '')
     {
         // 判断是否开启系统日志功能
-        if (config('system_log')) {
+        if (config_old('system_log')) {
             // 参数检查
             if (empty($action) || empty($model)) {
                 return '参数不能为空';
@@ -1260,17 +1260,17 @@ if (!function_exists('load_assets')) {
      */
     function load_assets($assets = '', $type = 'css')
     {
-        $assets_list = config('assets.' . $assets);
+        $assets_list = config_old('assets.' . $assets);
 
         $result = '';
         foreach ($assets_list as $item) {
             if ($type == 'css') {
-                $result .= '<link rel="stylesheet" href="' . $item . '?v=' . config('asset_version') . '">';
+                $result .= '<link rel="stylesheet" href="' . $item . '?v=' . config_old('asset_version') . '">';
             } else {
-                $result .= '<script src="' . $item . '?v=' . config('asset_version') . '"></script>';
+                $result .= '<script src="' . $item . '?v=' . config_old('asset_version') . '"></script>';
             }
         }
-        $result = str_replace(array_keys(config('template.tpl_replace_string')), array_values(config('template.tpl_replace_string')), $result);
+        $result = str_replace(array_keys(config_old('template.tpl_replace_string')), array_values(config_old('template.tpl_replace_string')), $result);
         return $result;
     }
 }

@@ -53,9 +53,9 @@ class Admin extends Common
             '__ADMIN_USER__',
             '__ADMIN_ROLE__',
             '__ADMIN_MODULE__',
-            config('database.prefix') . 'admin_user',
-            config('database.prefix') . 'admin_role',
-            config('database.prefix') . 'admin_module',
+            config_old('database.prefix') . 'admin_user',
+            config_old('database.prefix') . 'admin_role',
+            config_old('database.prefix') . 'admin_module',
         ];
 
         // 禁止操作核心表的主要数据
@@ -179,8 +179,8 @@ class Admin extends Common
         $protect_table = [
             '__ADMIN_USER__',
             '__ADMIN_ROLE__',
-            config('database.prefix') . 'admin_user',
-            config('database.prefix') . 'admin_role',
+            config_old('database.prefix') . 'admin_user',
+            config_old('database.prefix') . 'admin_role',
         ];
 
         // 验证是否操作管理员
@@ -418,7 +418,7 @@ class Admin extends Common
     {
         parent::initialize();
         // 是否拒绝ie浏览器访问
-        if (config('system.deny_ie') && get_browser_type() == 'ie') {
+        if (config_old('system.deny_ie') && get_browser_type() == 'ie') {
             $this->redirect('admin/ie/index');
         }
 
@@ -438,7 +438,7 @@ class Admin extends Common
         // 如果不是ajax请求，则读取菜单
         if (!$this->request->isAjax()) {
             // 读取顶部菜单
-            $this->assign('_top_menus', MenuModel::getTopMenu(config('top_menu_max'), '_top_menus'));
+            $this->assign('_top_menus', MenuModel::getTopMenu(config_old('top_menu_max'), '_top_menus'));
             // 读取全部顶级菜单
             $this->assign('_top_menus_all', MenuModel::getTopMenu('', '_top_menus_all'));
             // 获取侧边栏菜单
@@ -498,8 +498,8 @@ class Admin extends Common
     final protected function setPageParam()
     {
         _system_check();
-        $list_rows = input('?param.list_rows') ? input('param.list_rows') : config('list_rows');
-        config('paginate.list_rows', $list_rows);
-        config('paginate.query', input('get.'));
+        $list_rows = input('?param.list_rows') ? input('param.list_rows') : config_old('list_rows');
+        config_old('paginate.list_rows', $list_rows);
+        config_old('paginate.query', input('get.'));
     }
 }

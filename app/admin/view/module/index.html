@@ -151,7 +151,7 @@
                                     <form action="" method="get">
                                         <input class="form-control input-sm go-page" name="page" type="text" value="{:input('param.page', '1')}">
                                         <input class="form-control input-sm nums" name="list_rows" type="text"
-                                               value="{php}echo input('param.list_rows', '') == '' ? config('list_rows') : input('param.list_rows');{/php}">
+                                               value="{php}echo input('param.list_rows', '') == '' ? config_old('list_rows') : input('param.list_rows');{/php}">
                                         <input class="hidden" type="submit">
                                         / <strong>{$row_list->lastPage()}</strong> 页，共 <strong>{$row_list->total()}</strong> 条数据，每页显示数量
                                     </form>

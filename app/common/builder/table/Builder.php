@@ -587,7 +587,7 @@ class Builder extends ZBuilder
             ];
 
             // 开发模式
-            if (config('develop_mode')) {
+            if (config_old('develop_mode')) {
                 Cache::set($cache_name, $form);
             }
 
@@ -624,7 +624,7 @@ class Builder extends ZBuilder
             }
         }
 
-        if (!empty($params) && config('url_common_param')) {
+        if (!empty($params) && config_old('url_common_param')) {
             $params = array_filter($params, function ($v) {
                 return $v !== '';
             });
@@ -824,7 +824,7 @@ class Builder extends ZBuilder
     {
         if (!empty($items)) {
             // 按钮样式
-            $btn_style = array_merge(config('zbuilder.right_button'), $extra);
+            $btn_style = array_merge(config_old('zbuilder.right_button'), $extra);
 
             // 默认属性
             $btn_attribute = [
@@ -870,7 +870,7 @@ class Builder extends ZBuilder
             ];
 
             // 开发模式
-            if (config('develop_mode')) {
+            if (config_old('develop_mode')) {
                 Cache::set($cache_name, $form);
             }
 
@@ -936,7 +936,7 @@ class Builder extends ZBuilder
         $field = isset($attribute['field']) ? $attribute['field'] : '';
 
         // 按钮样式
-        $btn_style = array_merge(config('zbuilder.right_button'), $extra);
+        $btn_style = array_merge(config_old('zbuilder.right_button'), $extra);
 
         switch ($type) {
             // 编辑按钮
@@ -1104,7 +1104,7 @@ class Builder extends ZBuilder
                 'url' => $url,
             ];
 
-            $this->_vars['search_button'] = $search_button !== null ? $search_button : config('zbuilder.search_button');
+            $this->_vars['search_button'] = $search_button !== null ? $search_button : config_old('zbuilder.search_button');
         }
         return $this;
     }

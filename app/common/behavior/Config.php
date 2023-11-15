@@ -65,7 +65,7 @@ class Config
             // 表单项扩展目录
             '__EXTEND_FORM__' => PUBLIC_PATH.'extend/form'
         ];
-        config('template.tpl_replace_string', $view_replace_str);
+        config_old('template.tpl_replace_string', $view_replace_str);
 
         // 如果定义了入口为admin，则修改默认的访问控制器层
         if(defined('ENTRANCE') && ENTRANCE == 'admin') {
@@ -75,33 +75,33 @@ class Config
                 header("Location: ".$base_file.'/admin', true, 302);exit();
             }
 
-            if (!in_array($module, config('module.default_controller_layer'))) {
+            if (!in_array($module, config_old('module.default_controller_layer'))) {
                 // 修改默认访问控制器层
-                config('url_controller_layer', 'admin');
+                config_old('url_controller_layer', 'admin');
                 // 修改视图模板路径
-                config('template.view_path', Env::get('app_path'). $module. '/view/admin/');
+                config_old('template.view_path', Env::get('app_path'). $module. '/view/admin/');
             }
 
             // 插件静态资源目录
-            config('template.tpl_replace_string.__PLUGINS__', '/plugins');
+            config_old('template.tpl_replace_string.__PLUGINS__', '/plugins');
         } else {
             if ($module == 'admin') {
                 header("Location: ".$base_dir.ADMIN_FILE.'/admin', true, 302);exit();
             }
 
-            if ($module != '' && !in_array($module, config('module.default_controller_layer'))) {
+            if ($module != '' && !in_array($module, config_old('module.default_controller_layer'))) {
                 // 修改默认访问控制器层
-                config('url_controller_layer', 'home');
+                config_old('url_controller_layer', 'home');
             }
         }
 
         // 定义模块资源目录
-        config('template.tpl_replace_string.__MODULE_CSS__', PUBLIC_PATH. 'static/'. $module .'/css');
-        config('template.tpl_replace_string.__MODULE_JS__', PUBLIC_PATH. 'static/'. $module .'/js');
-        config('template.tpl_replace_string.__MODULE_IMG__', PUBLIC_PATH. 'static/'. $module .'/img');
-        config('template.tpl_replace_string.__MODULE_LIBS__', PUBLIC_PATH. 'static/'. $module .'/libs');
+        config_old('template.tpl_replace_string.__MODULE_CSS__', PUBLIC_PATH. 'static/'. $module .'/css');
+        config_old('template.tpl_replace_string.__MODULE_JS__', PUBLIC_PATH. 'static/'. $module .'/js');
+        config_old('template.tpl_replace_string.__MODULE_IMG__', PUBLIC_PATH. 'static/'. $module .'/img');
+        config_old('template.tpl_replace_string.__MODULE_LIBS__', PUBLIC_PATH. 'static/'. $module .'/libs');
         // 静态文件目录
-        config('public_static_path', PUBLIC_PATH. 'static/');
+        config_old('public_static_path', PUBLIC_PATH. 'static/');
 
         // 读取系统配置
         $system_config = cache('system_config');

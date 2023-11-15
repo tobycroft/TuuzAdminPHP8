@@ -17,9 +17,9 @@ class Common extends Controller
     protected function initialize()
     {
         // 后台公共模板
-        $this->assign('_admin_base_layout', config('admin_base_layout'));
+        $this->assign('_admin_base_layout', config_old('admin_base_layout'));
         // 当前配色方案
-        $this->assign('system_color', config('system_color'));
+        $this->assign('system_color', config_old('system_color'));
         // 输出弹出层参数
         $this->assign('_pop', $this->request->param('_pop'));
     }
@@ -156,7 +156,7 @@ class Common extends Controller
         }
         $suffix = $suffix == '' ? 'html' : $suffix;
         $template = $template == '' ? $action : $template;
-        $template_path = config('plugin_path'). "{$plugin}/view/{$template}.{$suffix}";
+        $template_path = config_old('plugin_path'). "{$plugin}/view/{$template}.{$suffix}";
         return parent::fetch($template_path, $vars, $config);
     }
 }

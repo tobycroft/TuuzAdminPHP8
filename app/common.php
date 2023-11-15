@@ -1502,7 +1502,9 @@ if (!function_exists('dp_send_message')) {
     }
 }
 
-function config($key)
+function config_old($key)
 {
-    return Config::get($key);
+    return array_merge(Config::get('app.'),
+        Config::get('tp.' . $key)
+    );
 }

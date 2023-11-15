@@ -17,7 +17,7 @@ class Home extends Common
     protected function initialize()
     {
         // 系统开关
-        if (!config('web_site_status')) {
+        if (!config_old('web_site_status')) {
             $this->error('站点已经关闭，请稍后访问~');
         }
     }

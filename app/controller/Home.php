@@ -17,7 +17,7 @@ class Home extends Common
     protected function initialize()
     {
         // 系统开关
-        if (!config('web_site_status')) {
+        if (!config_old('web_site_status')) {
             var_dump(config());
             exit();
         }

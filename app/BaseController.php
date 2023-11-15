@@ -6,7 +6,6 @@ namespace app;
 use liliuwei\think\Jump;
 use think\App;
 use think\exception\ValidateException;
-use think\facade\Config;
 use think\facade\Db;
 use think\Validate;
 
@@ -51,10 +50,9 @@ abstract class BaseController
     {
         $this->app = $app;
         $this->request = $this->app->request;
+
         $config = Db::name('dp_admin_config')->column('value', 'name');
-        foreach ($config as $key =>$value) {
-            Config::set($value,$key);
-        }
+        $this->app->config->set($config);
 //        Config::set($config, 'tp');
         // 控制器初始化
         $this->initialize();

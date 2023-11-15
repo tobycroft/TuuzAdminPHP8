@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title></title>
+		<link rel="stylesheet" href="./sdk/cxd.css"/>
+		<link rel="stylesheet" href="./sdk/iconfont.css"/>
+	</head>
+	<body >
+		<div id="root" class="app-wrapper"></div>
+	</body>
+	<script src="./lib/store.min.js"></script>
+	<script src="./lib/xe-utils.js"></script>
+	<script src="./lib/easy.js"></script>
+	<script src="./sdk/sdk.js"></script>
+	<script src="./lib/history.js"></script>
+	<script src="./env.js"></script>
+</html>
+<style>
+  html,
+  body,
+  .app-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+<script>
+
+(function () {
+  let amis = amisRequire('amis/embed');
+  const match = amisRequire('path-to-regexp').match;
+  let amisLib = amisRequire('amis');
+
+
+  // 如果想用 browserHistory 请切换下这处代码, 其他不用变
+  // const history = History.createBrowserHistory();
+  const history = History.createHashHistory();
+
+
+  const loginapp = {
+    type: 'page',
+    title: '系统名称',
+    subTitle: "默默系统",
+    className: "page app-login-page",
+    asideClassName: "b",
+    toolbarClassName: "toolbar",
+    bodyClassName: "content",
+    headerClassName: "header",
+    body: [
+      {
+        type: 'container',
+        body: [
+          {
+            type: 'flex',
+            items: [
+              {
+                type:"wrapper",
+                body:{
+                  type: 'tpl',
+                  tpl: ' ',
+                  inline: false
+                }
+              },
+              {
+                type:"wrapper",
+                body:{
+                  api: {
+                    url:'admin/login/doLogin',
+                    success(r,res){
+                      store('token',r.token);
+                      store('uid',r.id);
+                      store('nickname',r.name);
+                      store('type',r.type);
+                      store('head',r.head);
+                      setTimeout(() => {
+                        location.reload();
+                        // location.href = "index.html"
+                      }, 1000);
+                    }
+                  },
+                  type: 'form',
+                  title: '管理员登录',
+                  className: "bg-blue",
+                  panelClassName: "loginbox bg w-xxl Panel--primary",
+                  headerClassName: "b-info b-2x p",
+                  affixFooter: false,
+                  bodyClassName: "p-md",
+                  footerClassName: "p",
+                  submitText: "登录",
+                  body: [
+                    {label: '登录账户',name:"account",type: 'input-text'},
+                    {type: 'input-password',label: '登录密码',name: 'password'}
+                  ]
+                },
+              },
+
+              {
+                type:"wrapper",
+                body:{
+                  type: 'tpl',
+                  tpl: ' ',
+                  inline: false
+                }
+              },
+            ]
+          }
+        ]
+      },
+      {
+      "type": "flex",
+        "items": [
+          {
+            "type": "wrapper",
+            "body": "Copyright © 2020-2021 郑州天恩网络技术有限公司 All Rights Reserved"
+          },
+        ]
+      },
+      {
+      "type": "flex",
+        "items": [
+          {
+            "type": "wrapper",
+            "body": "豫ICP备20008040号"
+          },
+        ]
+      }
+    ],
+  }
+
+  const apps = {
+    type: 'app',
+    brandName: 'Admin',
+    // logo: '/public/logo.png',
+    // header: {
+    //   type: 'tpl',
+    //   inline: false,
+    //   className: 'w-full',
+    //   tpl: '<div class="flex justify-between"><div>顶部区域左侧</div><div>顶部区域右侧</div></div>'
+    // },
+    header: {
+      type: 'grid',
+      // inline: false,
+      // className: 'w-full',
+      columns:[
+        {
+          md:0,
+          body:[
+            {type: "button",level:"link",label:'刷新菜单',actionType:'reload',target:'apps'},
+            {type: "button",level:"link",label:'刷新页面',actionType:'reload',target:'apps'},
+            {type: "button",actionType: "dialog",label: "修改信息",level: "link",
+              dialog: {
+                title: "我的资料",
+                body: {
+                  type: "form",
+                  initApi: {
+                    url:'admin/admin/profile'
+                  },
+                  api: 'admin/admin/doProfile',
+                  mode: 'normal',
+                  body:[
+                    {type: 'input-text',name: 'mobile',label: '手机号'},
+                    {type: 'input-text',name: 'name',label: '姓名'},
+                    {type: 'input-password',name: 'oldpwd',label: '旧密码'},
+                    {type: 'input-password',name: 'newpwd',label: '密码',placeholder: '为空则不修改'},
+                    {type: 'input-password',name: 'newpwd2',label: '再次输入',placeholder: '再次输入新密码'},
+                  ]
+                }
+              }
+            },
+            {type: "button",level:"link",label:'退出系统',actionType:"ajax",
+              onClick:function(event,props){
+                store.clear();
+                location.reload();
+                // url:"admin/login/logout",
+                // success(r,res){
+                //   store.clear();
+                //   location.reload();
+                //   // window.location.href="index.html";
+                // }
+              },
+              // confirmText:"确认退出系统？"
+            },
+          ]
+        }
+      ]
+    },
+    // footer: '<div class="p-2 text-center bg-light">底部区域</div>',
+    // asideBefore: '<div class="p-2 text-center">菜单前面区域</div>',
+    // asideAfter: '<div class="p-2 text-center">菜单后面区域</div>',
+    name:'apps',
+    api: {
+      url:'/admin/menu/amisNav'
+    },
+  };
+  let app = loginapp;
+
+  if (store('?token')) {
+    app = apps;
+  }
+
+
+
+  function normalizeLink(to, location = history.location) {
+    to = to || '';
+
+    if (to && to[0] === '#') {
+      to = location.pathname + location.search + to;
+    } else if (to && to[0] === '?') {
+      to = location.pathname + to;
+    }
+
+    const idx = to.indexOf('?');
+    const idx2 = to.indexOf('#');
+    let pathname = ~idx
+      ? to.substring(0, idx)
+      : ~idx2
+      ? to.substring(0, idx2)
+      : to;
+    let search = ~idx ? to.substring(idx, ~idx2 ? idx2 : undefined) : '';
+    let hash = ~idx2 ? to.substring(idx2) : location.hash;
+
+    if (!pathname) {
+      pathname = location.pathname;
+    } else if (pathname[0] != '/' && !/^https?\:\/\//.test(pathname)) {
+      let relativeBase = location.pathname;
+      const paths = relativeBase.split('/');
+      paths.pop();
+      let m;
+      while ((m = /^\.\.?\//.exec(pathname))) {
+        if (m[0] === '../') {
+          paths.pop();
+        }
+        pathname = pathname.substring(m[0].length);
+      }
+      pathname = paths.concat(pathname).join('/');
+    }
+
+    return pathname + search + hash;
+  }
+
+  function isCurrentUrl(to, ctx) {
+    if (!to) {
+      return false;
+    }
+    const pathname = history.location.pathname;
+    const link = normalizeLink(to, {
+      ...location,
+      pathname,
+      hash: ''
+    });
+
+    if (!~link.indexOf('https') && ~link.indexOf(':')) {
+      let strict = ctx && ctx.strict;
+      return match(link, {
+        decode: decodeURIComponent,
+        strict: typeof strict !== 'undefined' ? strict : true
+      })(pathname);
+    }
+
+    return decodeURI(pathname) === link;
+  }
+
+  easy.defaults.baseURL = ENV.baseUrl;
+  easy.defaults.tokenField = 'token';
+  easy.defaults.successStatusField = 0;
+  easy.defaults.header['token'] = easy.store("?"+ENV.tokenField)?easy.store(ENV.tokenField):'';
+
+
+  let amisInstance = amis.embed(
+    '#root',
+    app,
+    {
+      location: history.location
+    },
+    {
+      
+      requestAdaptor(api){
+        api.url = ENV.baseUrl+api.url;
+        api.headers['token'] = store.get("?"+ENV.tokenField)?store.get(ENV.tokenField):'';
+        return api;
+      },
+      responseAdaptor(api, response, query, request){
+        if(response.status === 0){
+          if(easy.hasOwnProp(api,'success')){
+            api.success(response.data,response)
+          }
+        }
+        return response;
+      },
+      watchRouteChange: fn => {
+        return history.listen(fn);
+      },
+      updateLocation: (location, replace) => {
+        location = normalizeLink(location);
+        if (location === 'goBack') {
+          return history.goBack();
+        } else if (
+          (!/^https?\:\/\//.test(location) &&
+            location ===
+              history.location.pathname + history.location.search) ||
+          location === history.location.href
+        ) {
+          // 目标地址和当前地址一样，不处理，免得重复刷新
+          return;
+        } else if (/^https?\:\/\//.test(location) || !history) {
+          return (window.location.href = location);
+        }
+
+        history[replace ? 'replace' : 'push'](location);
+      },
+      jumpTo: (to, action) => {
+        if (to === 'goBack') {
+          return history.goBack();
+        }
+
+        to = normalizeLink(to);
+
+        if (isCurrentUrl(to)) {
+          return;
+        }
+
+        if (action && action.actionType === 'url') {
+          action.blank === false
+            ? (window.location.href = to)
+            : window.open(to, '_blank');
+          return;
+        } else if (action && action.blank) {
+          window.open(to, '_blank');
+          return;
+        }
+
+        if (/^https?:\/\//.test(to)) {
+          window.location.href = to;
+        } else if (
+          (!/^https?\:\/\//.test(to) &&
+            to === history.pathname + history.location.search) ||
+          to === history.location.href
+        ) {
+          // do nothing
+        } else {
+          history.push(to);
+        }
+      },
+      isCurrentUrl: isCurrentUrl,
+    },
+    {
+      // theme: 'dark'
+    }
+  );
+
+  // 或者
+  amisInstance.updateProps({
+    theme: 'cxd'
+  });
+
+  history.listen(state => {
+    amisInstance.updateProps({
+      location: state.location
+    });
+  });
+})();
+</script>
+<style>
+.loginbox{
+  /* max-width: 240px; */
+  margin-top: 120px;
+  border-radius: 10px !important;
+	background: rgba(0,0,0,.8);
+	box-shadow: 0 15px  25px rgba(0,0,0,.5);
+	border-radius: 10px;
+}
+.app-login-page .amis-scope.cxd-Page-main{
+  background: -moz-linear-gradient(top, #000000 0%, #ffffff 100%) !important;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#000000), color-stop(100%,#ffffff)) !important;
+  background: -webkit-linear-gradient(top, #000000 0%,#ffffff 100%) !important;
+  background: -o-linear-gradient(top, #000000 0%,#ffffff 100%) !important;
+  background: -ms-linear-gradient(top, #000000 0%,#ffffff 100%) !important;
+  background: linear-gradient(to bottom, #000000 0%,#ffffff 100%) !important;
+}
+
+.app-login-page {
+		margin: 0;
+		width: 100%;
+		height: 100vh;
+		background: linear-gradient(45deg, #00F5D4, #01BEFF, #9A5CE5, #F15BB5) !important;
+		background-size: 500% 500%; !important
+		animation: gradientBG 15s ease infinite !important;
+	}
+
+	@keyframes gradientBG {
+		0% {
+			background-position: 0% 50%;
+		}
+
+		50% {
+			background-position: 100% 50%;
+		}
+
+		100% {
+			background-position: 0% 50%;
+		}
+	}
+
+
+  </style>

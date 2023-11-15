@@ -1,5 +1,4 @@
 <?php
-
 namespace app;
 
 use think\db\exception\DataNotFoundException;
@@ -32,7 +31,7 @@ class ExceptionHandle extends Handle
      * 记录异常信息（包括日志或者其它方式记录）
      *
      * @access public
-     * @param Throwable $exception
+     * @param  Throwable $exception
      * @return void
      */
     public function report(Throwable $exception): void
@@ -45,7 +44,7 @@ class ExceptionHandle extends Handle
      * Render an exception into an HTTP response.
      *
      * @access public
-     * @param \think\Request $request
+     * @param \think\Request   $request
      * @param Throwable $e
      * @return Response
      */

@@ -1,0 +1,19 @@
+{literal}
+declare (strict_types = 1);
+{/literal}
+namespace {$schema.namespace};
+
+{foreach $schema['use'] as $k }use {$k};
+{/foreach}
+
+class {$schema.class} extends {$schema.extends}
+{
+
+{foreach $schema['public'] as $k }
+  public function {$k['name']}({$k['args']}) {
+    {$k['function']}
+
+  }
+{/foreach}
+
+}

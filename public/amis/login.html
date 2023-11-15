@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="./sdk/sdk.css"/>
+		<link rel="stylesheet" href="./sdk/cxd.css"/>
+		<link rel="stylesheet" href="./sdk/helper.css"/>
+		<script src="./env.js"></script>
+	</head>
+	<body class="pear-container">
+		<div id="root" class="app-wrapper"></div>
+	</body>
+	<script src="./sdk/sdk.js"></script>
+
+	<!--<script src="./lib/axios.min.js"></script>-->
+	<!--<script type="module" src="./lib/very-axios.min.js"></script>-->
+	<script src="./lib/store.min.js"></script>
+	<script src="./lib/easyHttp.js"></script>
+	<script src="./lib/xe-utils.js"></script>
+	<script src="./lib/xe-ajax.js"></script>
+	<script src="./lib/app.js"></script>
+</html>
+<script language="JavaScript">
+(function () {
+  let amisLib = amisRequire('amis');
+  let amis = amisRequire('amis/embed');
+  let locat = XEUtils.locat();
+  let query = locat.search;
+
+  // 通过替换下面这个配置来生成不同页面
+  let amisJSON = {
+    type: 'service',
+    body:{
+      "type": "wrapper",
+      "body": [
+        {
+          "type": "form",
+          "title": "",
+          "body": [
+            {
+              "label": "登录账户",
+              "type": "input-text",
+              "name": "account",
+              "required": true
+            },
+            {
+              "type": "input-password",
+              "label": "登录密码",
+              "name": "password",
+              "required": true
+            }
+          ],
+          "submitText": "确定登录",
+          "api": {
+            url:"admin/login/dologin",
+            success(r,res){
+              store('token',r.token);
+              store('user',r);
+              if (top.location != self.location) {
+                parent.location.reload();
+              }else{
+                location.reload();
+              }
+            }
+          },
+          "name": "login",
+          "autoFocus": true,
+          "resetAfterSubmit": false,
+          "target": "",
+          "reload": ""
+        }
+      ],
+      "size": "sm",
+      "className": "bg-white"
+    }
+    // schemaApi: {
+    //   url:"admin/AmisPage/page"+query,
+    // }
+    // schemaApi: {
+    //   url:"admin/AmisPage/page"+query,
+    //   success(r,res){
+    //     store('token',r.token);
+    //     store('user',r);
+    //     if (top.location != self.location) {
+    //       parent.location.reload();
+    //     }else{
+    //       location.reload();
+    //     }
+    //   }
+    // }
+  };
+  let amisScoped = amis.embed('#root', amisJSON);
+})();
+</script>

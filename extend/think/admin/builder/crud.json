@@ -1,0 +1,43 @@
+[
+  {
+    "type":"controller",
+    "path": "app/admin/controller/",
+    "namespace": "app\\admin\\controller",
+    "use": [],
+    "class": "{$model}",
+    "extends": "Base",
+    "public":[
+      {
+        "name":"_filter",
+        "args":"$request",
+        "function":"return [];"
+      }
+    ],
+    "protected":[
+      {
+        "name":"getModel",
+        "function":"return new \\app\\admin\\model\\{$model}();"
+      }
+    ]
+  },
+  {
+    "type":"model",
+    "path": "app/admin/model/",
+    "namespace":"app\\admin\\model",
+    "use":[
+      "think\\Model"
+    ],
+    "class":"{$model}",
+    "extends":"Model"
+  },
+  {
+    "path": "app/admin/validate/",
+    "type":"validate",
+    "namespace":"app\\admin\\validate",
+    "use":[
+      "think\\Validate"
+    ],
+    "class":"{$model}",
+    "extends":"Validate"
+  }
+]

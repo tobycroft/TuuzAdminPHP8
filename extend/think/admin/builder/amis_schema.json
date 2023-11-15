@@ -1,0 +1,180 @@
+{
+  "type": "page",
+  "title": "{$title}",
+  "body": [
+    {
+      "type": "crud",
+      "className": "m",
+      "name": "Curd",
+      "autoFocus": true,
+      "features": [],
+      "columns": [
+        {
+          foreach
+          $fields
+          as
+          $k
+        }
+
+        {
+          "type": "text",
+          "label": "{$k.comment?$k.comment:$k.name}",
+          "name": "{$k.name}",
+          "placeholder": "-"
+        },
+        {
+          /foreach
+        }
+        {
+          "type": "operation",
+          "label": "操作",
+          "buttons": [
+            {
+              "type": "button",
+              "label": "编辑",
+              "actionType": "dialog",
+              "dialog": {
+                "title": "编辑",
+                "body": [
+                  {
+                    "type": "form",
+                    "title": "表单",
+                    "body": [
+                      {
+                        foreach
+                        $fields
+                        as
+                        $k
+                      }
+                      {
+                        neq
+                        name=
+                        "k['name']"
+                        value=
+                        "id"
+                      }
+                      {
+                        "type": "input-text",
+                        "label": "{$k.comment?$k.comment:$k.name}",
+                        "name": "{$k.name}"
+                      },
+                      {
+                        /neq
+                      }
+                      {
+                        /foreach
+                      }
+                      {
+                        "type": "hidden",
+                        "name": "id"
+                      }
+                    ],
+                    "api": "admin/{$model}/update"
+                  }
+                ],
+                "type": "dialog",
+                "closeOnEsc": false,
+                "closeOnOutside": false,
+                "showCloseButton": true,
+                "size": ""
+              }
+            },
+            {
+              "type": "button",
+              "label": "删除",
+              "actionType": "ajax",
+              "level": "danger",
+              "api": "admin/{$model}/remove",
+              "confirmText": "确认删除?"
+            }
+          ]
+        }
+      ],
+      "messages": {},
+      "api": "admin/{$model}/search",
+      "headerToolbar": [
+        {
+          "type": "bulk-actions"
+        },
+        {
+          "type": "search-box",
+          "align": "right",
+          "name": "searchKey",
+          "placeholder": "关键字检索"
+        },
+        {
+          "type": "button",
+          "tpl": "内容",
+          "label": "刷新",
+          "align": "right",
+          "actionType": "reload",
+          "target": "Curd"
+        },
+        {
+          "type": "button",
+          "tpl": "内容",
+          "label": "新增",
+          "align": "left",
+          "actionType": "dialog",
+          "dialog": {
+            "type": "dialog",
+            "title": "新增",
+            "body": [
+              {
+                "type": "form",
+                "title": "表单",
+                "body": [
+                  {
+                    foreach
+                    $fields
+                    as
+                    $k
+                  }
+                  {
+                    neq
+                    name=
+                    "k['name']"
+                    value=
+                    "id"
+                  }
+                  {
+                    "type": "input-text",
+                    "label": "{$k.comment?$k.comment:$k.name}",
+                    "name": "{$k.name}"
+                  },
+                  {
+                    /neq
+                  }
+                  {
+                    /foreach
+                  }
+                  {
+                    "type": "hidden",
+                    "name": "guids"
+                  }
+                ],
+                "api": "admin/{$model}/insert"
+              }
+            ],
+            "closeOnEsc": false,
+            "closeOnOutside": false,
+            "showCloseButton": true,
+            "size": ""
+          }
+        }
+      ],
+      "syncLocation": false,
+      "columnsTogglable": false,
+      "itemActions": [],
+      "defaultParams": {},
+      "alwaysShowPagination": true,
+      "filter": null,
+      "perPageAvailable": [
+        10
+      ],
+      "bulkActions": []
+    }
+  ],
+  "aside": [],
+  "messages": {}
+}

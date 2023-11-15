@@ -1,0 +1,247 @@
+
+.flex-wrap {
+  // 1212
+	flex-wrap: wrap;
+}
+
+.flex {
+	display: flex;
+}
+
+// 定义flex等分
+@for $i from 0 through 12 {
+	.flex-#{$i} {
+		flex: $i;
+	}
+}
+
+@for $i from 1 through 24 {
+	.cl-col-push-#{$i},
+	.cl-col-pull-#{$i} {
+		position: relative;
+	}
+}
+
+
+
+// 定义字体(px)单位，小于20都为px单位字体
+@for $i from 9 to 80 {
+	.text-size-#{$i} {
+		font-size: $i + px;
+	}
+}
+
+
+// 定义内外边距，历遍1-80
+@for $i from 0 through 120 {
+	// 只要双数和能被5除尽的数
+	@if $i % 2 == 0 or $i % 5 == 0 {
+		// 得出：margin-30或者m-30
+		.margin-#{$i}, .m-#{$i} {
+			margin: $i + px!important;
+		}
+    .margin-tb-#{$i}, .m-tb-#{$i} {
+    	margin-top: $i + px!important;
+    	margin-bottom: $i + px!important;
+    }
+    
+		
+		// 得出：padding-30或者p-30
+		.padding-#{$i}, .p-#{$i} {
+			padding: $i + px!important;
+		}
+    
+    .padding-tb-#{$i}, .p-tb-#{$i} {
+    	padding-top: $i + px!important;
+    	padding-bottom: $i + px!important;
+    }
+		
+		@each $short, $long in l left, t top, r right, b bottom {
+			// 缩写版，结果如： m-l-30
+			// 定义外边距
+			.m-#{$short}-#{$i} {
+				margin-#{$long}: $i + px!important;
+			}
+			
+			// 定义内边距
+			.p-#{$short}-#{$i} {
+				padding-#{$long}: $i + px!important;
+			}
+			
+			// 完整版，结果如：margin-left-30
+			// 定义外边距
+			.margin-#{$long}-#{$i} {
+				margin-#{$long}: $i + px!important;
+			}
+
+      .margin-lr-#{$i}, .m-lr-#{$i} {
+        margin-left: $i + px!important;
+        margin-right: $i + px!important;
+      }
+			
+			// 定义内边距
+			.padding-#{$long}-#{$i} {
+				padding-#{$long}: $i + px!important;
+			}
+
+      .padding-lr-#{$i}, .p-lr-#{$i} {
+        padding-left: $i + px!important;
+        padding-right: $i + px!important;
+      }
+		}
+	}
+}
+.border{
+  border:solid 1px #c1c1c1
+}
+@each $short, $long in l left, t top, r right, b bottom {
+  .border-#{$long}{
+    border-#{$long}:solid 1px #c1c1c1
+  }
+}
+
+
+
+@for $i from 18 to 80 {
+  .line-height-#{$i}{
+    line-height: #{$i}px;
+  }
+}
+
+
+
+@for $i from 4 to 30 {
+  .shadow-#{$i}{
+    box-shadow:0 #{$i}px #{$i*2}px rgba(0,0,0,.08)
+  }
+
+}
+
+@for $i from 1 to 30 {
+  .round-#{$i}{
+    border-radius:#{$i}px;
+  }
+}
+
+
+@for $i from 1 to 24 {
+  .col-#{$i}{
+    width:#{$i*4.166666666666667} px;
+  }
+}
+
+
+.width-8{width: 8.33333333%;}       
+.width-16{width: 16.66666667%;}      
+.width-25{width: 25%;}
+.width-33{width: 33.33333333%;}     
+.width-41{width: 41.66666667%;}      
+.width-50{width: 50%;}
+.width-58{width: 58.33333333%;}     
+.width-66{width: 66.66666667%;}      
+.width-75{width: 75%;}
+.width-83{width: 83.33333333%;}     
+.width-91{width: 91.66666667%;}      
+.width-100{width: 100%;}
+
+
+.width-100{width:100%;}   
+.width-90{width:90%;}   
+.width-85{width:85%;}   
+.width-80{width:80%;}   
+.width-75{width:75%;}      
+.width-70{width:70%;}
+.width-67{width:67%;}     
+.width-60{width:60%;}   
+.width-50{width:50%;}   
+.width-40{width:40%;}   
+.width-33{width:32.8%;}   
+.width-30{width:30%;}
+.width-25{width:25%;}     
+.width-20{width:20%;}   
+.width-15{width:15%;}   
+.width-10{width:10%;}   
+.width-5{width:5%;}        
+.width-0{width:0px;}
+
+
+.text-bold {
+  font-weight: bold;
+}
+
+// .text-bold {
+//   font-weight:900
+// }
+.text-left {
+  text-align:left
+}
+.text-right {
+  text-align:right
+}
+.text-center {
+  text-align:center
+}
+.round-0 {
+  border-radius:0px!important
+}
+
+
+
+.bg-g0{background-color:#000;}                     
+.bg-g2{background-color:#222;}
+.bg-g4{background-color:#444;}
+.bg-g5{background-color:#555;}                     
+.bg-g6{background-color:#666;}
+.bg-g7{background-color:#777;}                     
+.bg-g8{background-color:#888;}      
+.bg-g9{background-color:#999;}
+
+.bg-gray{background-color:#333;}                     
+
+.bg-navy { background-color: #001f3f; }            
+.bg-blue { background-color: #0074d9;color: #fff; }
+.bg-aqua { background-color: #7fdbff; }            
+.bg-teal { background-color: #39cccc; }
+.bg-olive { background-color: #3d9970; }           
+.bg-green { background-color: #429742; }
+.bg-lime { background-color: #01ff70; }            
+.bg-yellow { background-color: #ffdc00; }
+.bg-orange { background-color: #F37B1D; }          
+.bg-red { background-color: #dd514c; }
+.bg-fuchsia { background-color: #f012be; }         
+.bg-purple { background-color: #8E488E; }
+.bg-maroon { background-color: #85144b; }          
+.bg-white{ background-color:#fff; }
+.bg-native{background-color: #e6e6e6;color: #222;}
+
+
+.je-g0{color:#000;}               
+.je-g2{color:#222;}                
+.je-g4{color:#444;}       
+.je-g5{color:#555;}
+.je-g6{color:#666;}               
+.je-g7{color:#777;}                
+.je-g8{color:#888;}                 
+.je-g9{color:#999;}       
+.je-ga{color:#aaa;}               
+.je-gb{color:#bbb;}                
+.je-gc{color:#ccc;}                 
+.je-gd{color:#ddd;}       
+.je-ge{color:#eee;}
+
+.text-gray{color:#333;}                 
+.text-white{color:#fff;}
+.text-navy { color: #001f3f; }      
+.text-blue { color: #0074d9; }       
+.text-aqua { color: #7fdbff; }        
+.text-teal { color: #39cccc; }
+.text-olive { color: #3d9970; }     
+.text-green { color: #429742; }      
+.text-lime { color: #01ff70; }        
+.text-yellow { color: #ffdc00; }
+.text-orange { color: #F37B1D; }    
+.text-red { color: #dd514c; }        
+.text-fuchsia { color: #f012be; }     
+.text-purple { color: #8E488E; }
+.text-maroon { color: #85144b; }    
+.text-black { color: #111111; }

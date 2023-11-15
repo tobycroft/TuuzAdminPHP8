@@ -52,7 +52,10 @@ abstract class BaseController
         $this->app = $app;
         $this->request = $this->app->request;
         $config = Db::name('dp_admin_config')->column('value', 'name');
-        Config::set($config, 'tp');
+        foreach ($config as $key =>$value) {
+            Config::set($value,$key);
+        }
+//        Config::set($config, 'tp');
         // 控制器初始化
         $this->initialize();
     }

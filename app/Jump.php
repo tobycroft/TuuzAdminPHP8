@@ -162,7 +162,7 @@ trait Jump
         $config = $this->app['config'];
 
         return $isAjax
-        ? $config->get('default_ajax_return')
-        : $config->get('default_return_type');
+        ? $config->get('jump.default_ajax_return')
+        : $config->get('jump.default_return_type');
     }
 }

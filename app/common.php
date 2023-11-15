@@ -1504,6 +1504,11 @@ if (!function_exists('dp_send_message')) {
 
 function config_old($key)
 {
+    if (empty(Config::get('tp.'))) {
+        $config = \think\facade\Db::name('dp_admin_config')->column('value', 'name');
+        Config::set($config, 'tp');
+    }
+
     return array_merge(Config::get('app.'),
         Config::get('tp.')
     )[$key];

@@ -18,7 +18,7 @@ class Home extends Common
     {
         // 系统开关
         if (!config('web_site_status')) {
-            $this->error('站点已经关闭，请稍后访问~');
+            return config('web_site_status');
         }
     }
 }

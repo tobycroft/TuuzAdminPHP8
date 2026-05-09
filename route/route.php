@@ -2,15 +2,6 @@
 
 use think\facade\App;
 
-// 模块映射表：将 admin 虚拟模块映射到实际模块
-$moduleMap = [
-    'admin' => [
-        'index' => 'admin',   // /admin/index → app/admin/controller/
-        'user' => 'user',     // /admin/user → app/user/controller/
-        'admin' => 'admin',   // /admin/admin → app/admin/controller/
-    ]
-];
-
 // 辅助函数：查找控制器类
 function findController($module, $controller) {
     // 尝试1：大驼峰命名（PSR-4标准）
@@ -34,9 +25,18 @@ function findController($module, $controller) {
     return false;
 }
 
+// 静态资源文件扩展名
+$staticExtensions = ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'ico', 'woff', 'woff2', 'ttf', 'eot'];
+
 // 完整路由：支持 /admin/module/controller/function/param 格式
 \think\facade\Route::any('admin/:realModule/:controller/:function/[:param]', function ($realModule, $controller, $function, $param = '') {
-    global $moduleMap;
+    // 检查是否是静态资源请求
+    $pathInfo = \think\facade\Request::instance()->pathinfo();
+    $extension = strtolower(pathinfo($pathInfo, PATHINFO_EXTENSION));
+    if (in_array($extension, $GLOBALS['staticExtensions'])) {
+        // 静态资源直接返回404（由Web服务器处理）
+        return abort(404);
+    }
 
     // CORS处理
     header('Access-Control-Allow-Origin: *');
@@ -49,6 +49,13 @@ function findController($module, $controller) {
     }
 
     // 获取实际模块名（通过映射表）
+    $moduleMap = [
+        'admin' => [
+            'index' => 'admin',
+            'user' => 'user',
+            'admin' => 'admin',
+        ]
+    ];
     $module = isset($moduleMap['admin'][$realModule]) ? $moduleMap['admin'][$realModule] : $realModule;
 
     // 查找控制器（支持多种命名方式）
@@ -75,7 +82,12 @@ function findController($module, $controller) {
 
 // 简化路由：/admin/module/controller
 \think\facade\Route::any('admin/:realModule/:controller', function ($realModule, $controller) {
-    global $moduleMap;
+    // 检查是否是静态资源请求
+    $pathInfo = \think\facade\Request::instance()->pathinfo();
+    $extension = strtolower(pathinfo($pathInfo, PATHINFO_EXTENSION));
+    if (in_array($extension, $GLOBALS['staticExtensions'])) {
+        return abort(404);
+    }
 
     // CORS处理
     header('Access-Control-Allow-Origin: *');
@@ -88,6 +100,13 @@ function findController($module, $controller) {
     }
 
     // 获取实际模块名（通过映射表）
+    $moduleMap = [
+        'admin' => [
+            'index' => 'admin',
+            'user' => 'user',
+            'admin' => 'admin',
+        ]
+    ];
     $module = isset($moduleMap['admin'][$realModule]) ? $moduleMap['admin'][$realModule] : $realModule;
 
     // 查找控制器（支持多种命名方式）
@@ -109,8 +128,6 @@ function findController($module, $controller) {
 
 // 默认路由：/admin
 \think\facade\Route::any('admin', function () {
-    global $moduleMap;
-
     // CORS处理
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Max-Age: 86400');
@@ -143,6 +160,13 @@ function findController($module, $controller) {
 
 // 前台路由：/:controller/:function/[:param]
 \think\facade\Route::any(':controller/:function/[:param]', function ($controller, $function, $param = '') {
+    // 检查是否是静态资源请求
+    $pathInfo = \think\facade\Request::instance()->pathinfo();
+    $extension = strtolower(pathinfo($pathInfo, PATHINFO_EXTENSION));
+    if (in_array($extension, $GLOBALS['staticExtensions'])) {
+        return abort(404);
+    }
+
     // CORS处理
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Max-Age: 86400');

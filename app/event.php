@@ -6,7 +6,9 @@ return [
 
     'listen'    => [
         'AppInit'  => [],
-        'HttpRun'  => [],
+        'HttpRun'  => [
+            'app\\common\\behavior\\Config',  // 注册配置初始化行为
+        ],
         'HttpEnd'  => [],
         'LogLevel' => [],
         'LogWrite' => [],

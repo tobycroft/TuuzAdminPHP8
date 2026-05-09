@@ -166,14 +166,24 @@ class Config
         $coreConfigs = ['app', 'template', 'database', 'cache', 'route', 'log', 'session', 'cookie', 'module'];
         foreach ($coreConfigs as $coreKey) {
             try {
-                $coreConfig = Config::pull($coreKey);
-                if (!is_array($coreConfig)) {
-                    // 如果核心配置不是数组，尝试重新加载
+                // 使用反射直接检查配置值类型
+                $configInstance = \think\App::getInstance()->container->get('think\Config');
+                $reflection = new \ReflectionClass($configInstance);
+                $property = $reflection->getProperty('config');
+                $property->setAccessible(true);
+                $configArray = $property->getValue($configInstance);
+                
+                if (isset($configArray[$coreKey]) && !is_array($configArray[$coreKey])) {
+                    // 如果核心配置不是数组，重置为空数组
                     Config::set([], $coreKey);
                 }
-            } catch (\TypeError $e) {
-                // 如果类型错误，重置为空数组
-                Config::set([], $coreKey);
+            } catch (\Exception $e) {
+                // 如果出现任何错误，重置为空数组
+                try {
+                    Config::set([], $coreKey);
+                } catch (\Exception $e2) {
+                    // 忽略进一步的错误
+                }
             }
         }
     }

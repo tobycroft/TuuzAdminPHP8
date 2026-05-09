@@ -122,6 +122,44 @@ abstract class BaseController
      */
     protected function fetch($template = '', $vars = [], $config = [])
     {
+        // 调试模式：输出实际的模板路径
+        if (true) { // 强制开启调试，调试完成后改为 false
+            // 获取当前请求信息
+            $pathInfo = $this->request->pathinfo();
+            $controller = $this->request->controller();
+            $action = $this->request->action();
+
+            // 构建可能的模板路径
+            $possiblePaths = [
+                // 方式1：基于当前请求的控制器和方法
+                "app/view/{$controller}/{$action}.html",
+                // 方式2：admin模块下的视图
+                "app/admin/view/{$controller}/{$action}.html",
+                // 方式3：user模块下的视图
+                "app/user/view/{$controller}/{$action}.html",
+                // 方式4：如果指定了模板名
+                (!empty($template) ? "app/view/{$template}.html" : ''),
+                (!empty($template) ? "app/admin/view/{$template}.html" : ''),
+                (!empty($template) ? "app/user/view/{$template}.html" : ''),
+            ];
+
+            // 输出调试信息
+            echo '<pre>';
+            echo "当前请求路径: {$pathInfo}\n";
+            echo "控制器: {$controller}\n";
+            echo "方法: {$action}\n";
+            echo "传入的模板名: '" . ($template ?: '空') . "'\n";
+            echo "\n可能的模板路径:\n";
+            foreach ($possiblePaths as $path) {
+                if (!empty($path)) {
+                    $fullPath = $this->app->getRootPath() . $path;
+                    $exists = file_exists($fullPath) ? '✓ 存在' : '✗ 不存在';
+                    echo "  {$path} [{$exists}]\n";
+                }
+            }
+            echo '</pre>';
+        }
+
         return View::fetch($template, $vars, $config);
     }
 

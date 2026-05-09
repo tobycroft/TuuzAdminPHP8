@@ -213,7 +213,21 @@ if (!function_exists('config')) {
                 return is_array($config) ? $config : [];
             }
 
-            return 0 === strpos($name, '?') ? Config::has(substr($name, 1)) : Config::get($name);
+            if (0 === strpos($name, '?')) {
+                return Config::has(substr($name, 1));
+            }
+            
+            // 检查是否是二级配置（如 xxx.yyy）
+            if (strpos($name, '.') !== false) {
+                list($first, $second) = explode('.', $name, 2);
+                // 先检查一级配置是否存在且为数组
+                $firstConfig = Config::pull($first);
+                if (!is_array($firstConfig)) {
+                    return null;
+                }
+            }
+            
+            return Config::get($name);
         } else {
             // ThinkPHP 8 中 Config::set() 的参数顺序是 (array $config, ?string $name = null)
             if (is_array($name)) {

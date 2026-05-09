@@ -8,15 +8,25 @@ if (!function_exists('url')) {
     /**
      * URL生成（ThinkPHP 8 方式）
      * @param string        $url        URL地址
-     * @param array|string  $vars       变量
+     * @param array|string  $vars       变量（支持数组或字符串）
      * @param bool|string   $suffix     后缀
      * @param bool          $domain     是否显示域名
      * @return string
      */
     function url($url = '', $vars = '', $suffix = true, $domain = false)
     {
+        // 将字符串参数转换为数组
+        if (is_string($vars) && !empty($vars)) {
+            parse_str($vars, $vars);
+        }
+
+        // 如果是字符串且为空，转换为空数组
+        if ($vars === '') {
+            $vars = [];
+        }
+
         // 使用 Route facade 生成 URL
-        return \think\facade\Route::buildUrl($url, $vars)->suffix($suffix)->domain($domain);
+        return (string) \think\facade\Route::buildUrl($url, $vars)->suffix($suffix)->domain($domain);
     }
 }
 

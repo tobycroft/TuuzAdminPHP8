@@ -116,6 +116,11 @@ class Config
         // 静态文件目录
         config('public_static_path', '/static/');
 
+        // 保存需要保护的字符串配置项，防止被数据库配置覆盖
+        $protectedStringConfigs = [
+            'public_static_path' => config('public_static_path'),
+        ];
+
         // 读取系统配置
         $system_config = cache('system_config');
         if (!$system_config) {
@@ -143,8 +148,8 @@ class Config
             $protectedKeys = ['app', 'template', 'database', 'cache', 'route', 'log', 'session', 'cookie'];
             
             foreach ($system_config as $key => $value) {
-                // 跳过核心配置项
-                if (in_array($key, $protectedKeys)) {
+                // 跳过核心配置项和保护的字符串配置项
+                if (in_array($key, $protectedKeys) || isset($protectedStringConfigs[$key])) {
                     continue;
                 }
                 
@@ -163,6 +168,11 @@ class Config
                 }
                 // 如果现有配置是数组但新值不是，保留原有数组配置
             }
+        }
+        
+        // 恢复保护的字符串配置项
+        foreach ($protectedStringConfigs as $key => $value) {
+            config($key, $value);
         }
         
         // 确保核心配置项都是数组类型

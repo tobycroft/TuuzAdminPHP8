@@ -664,10 +664,10 @@ if (!function_exists('trait_uses_recursive')) {
 if (!function_exists('url')) {
     /**
      * URL生成（适配ThinkPHP 8）
-     * @param string        $url        URL地址
-     * @param string|array  $vars       变量
-     * @param bool|string   $suffix     后缀
-     * @param bool          $domain     是否显示域名
+     * @param string $url URL地址
+     * @param string|array $vars 变量
+     * @param bool|string $suffix 后缀
+     * @param bool $domain 是否显示域名
      * @return string
      */
     function url($url = '', $vars = '', $suffix = true, $domain = false)

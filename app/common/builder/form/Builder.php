@@ -70,7 +70,7 @@ class Builder extends ZBuilder
         $this->_template = Env::get('app_path') . 'common/builder/form/layout.html';
         $this->_vars['post_url'] = $this->request->url(true);
         $this->_vars['_token_name'] = config_old('zbuilder.form_token_name');
-        $this->_vars['_token_value'] = $this->request->token($this->_vars['_token_name']);
+        $this->_vars['_token_value'] = token($this->_vars['_token_name']);
     }
 
     /**

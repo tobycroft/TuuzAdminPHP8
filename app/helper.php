@@ -6,7 +6,7 @@
 
 if (!function_exists('url')) {
     /**
-     * URL生成
+     * URL生成（ThinkPHP 8 方式）
      * @param string        $url        URL地址
      * @param array|string  $vars       变量
      * @param bool|string   $suffix     后缀
@@ -15,7 +15,8 @@ if (!function_exists('url')) {
      */
     function url($url = '', $vars = '', $suffix = true, $domain = false)
     {
-        return \think\facade\Url::build($url, $vars, $suffix, $domain);
+        // 使用 Route facade 生成 URL
+        return \think\facade\Route::buildUrl($url, $vars)->suffix($suffix)->domain($domain);
     }
 }
 
@@ -27,7 +28,7 @@ if (!function_exists('captcha_src')) {
      */
     function captcha_src($id = '')
     {
-        return \think\facade\Url::build('/captcha' . ($id ? "/{$id}" : ''));
+        return url('/captcha' . ($id ? "/{$id}" : ''));
     }
 }
 

@@ -7,7 +7,7 @@ use app\admin\model\Attachment as AttachmentModel;
 use app\common\builder\ZBuilder;
 use think\Db;
 use think\facade\Env;
-use think\facade\Hook;
+use think\facade\Event;
 use think\File;
 use think\Image;
 use Tobycroft\AossSdk\Aoss;
@@ -174,7 +174,7 @@ class Attachment extends Admin
 
         // 附件上传钩子，用于第三方文件上传扩展
         if (config_old('upload_driver') != 'local') {
-            $hook_result = Hook::listen('upload_attachment', ['file' => $file, 'from' => $from, 'module' => $module], true);
+            $hook_result = Event::trigger('upload_attachment', ['file' => $file, 'from' => $from, 'module' => $module], true);
             if (false !== $hook_result) {
                 return $hook_result;
             }

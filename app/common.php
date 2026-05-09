@@ -418,7 +418,7 @@ if (!function_exists('hook')) {
      */
     function hook($name = '', $params = null, $once = false)
     {
-        \think\facade\Hook::listen($name, $params, $once);
+        \think\facade\Event::trigger($name, $params, $once);
     }
 }
 

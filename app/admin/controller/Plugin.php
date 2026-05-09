@@ -8,7 +8,7 @@ use app\admin\model\Plugin as PluginModel;
 use app\common\builder\ZBuilder;
 use think\Db;
 use think\facade\Cache;
-use think\facade\Hook;
+use think\facade\Event;
 use util\Sql;
 
 /**
@@ -34,7 +34,7 @@ class Plugin extends Admin
         }
 
         // 监听tab钩子
-        Hook::listen('plugin_index_tab_list', $tab_list);
+        Event::trigger('plugin_index_tab_list', $tab_list);
 
         switch ($group) {
             case 'local':

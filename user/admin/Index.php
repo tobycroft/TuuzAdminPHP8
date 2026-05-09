@@ -10,7 +10,7 @@ use app\common\builder\ZBuilder;
 use app\user\model\Role as RoleModel;
 use app\user\model\User as UserModel;
 use think\Db;
-use think\facade\Hook;
+use think\facade\Event;
 use util\Tree;
 
 /**
@@ -113,7 +113,7 @@ class Index extends Admin
             $data['roles'] = isset($data['roles']) ? implode(',', $data['roles']) : '';
 
             if ($user = UserModel::create($data)) {
-                Hook::listen('user_add', $user);
+                Event::trigger('user_add', $user);
                 // 记录行为
                 action_log('user_add', 'admin_user', $user['id'], UID);
                 $this->success('新增成功', url('index'));
@@ -214,7 +214,7 @@ class Index extends Admin
 
             if (UserModel::update($data)) {
                 $user = UserModel::get($data['id']);
-                Hook::listen('user_edit', $user);
+                Event::trigger('user_edit', $user);
                 // 记录行为
                 action_log('user_edit', 'admin_user', $user['id'], UID, get_nickname($user['id']));
                 $this->success('编辑成功', cookie('__forward__'));
@@ -484,7 +484,7 @@ class Index extends Admin
      */
     public function delete($ids = [])
     {
-        Hook::listen('user_delete', $ids);
+        Event::trigger('user_delete', $ids);
         return $this->setStatus('delete');
     }
 
@@ -496,7 +496,7 @@ class Index extends Admin
      */
     public function enable($ids = [])
     {
-        Hook::listen('user_enable', $ids);
+        Event::trigger('user_enable', $ids);
         return $this->setStatus('enable');
     }
 
@@ -508,7 +508,7 @@ class Index extends Admin
      */
     public function disable($ids = [])
     {
-        Hook::listen('user_disable', $ids);
+        Event::trigger('user_disable', $ids);
         return $this->setStatus('disable');
     }
 

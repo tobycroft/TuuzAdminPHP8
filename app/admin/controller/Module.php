@@ -10,7 +10,7 @@ use app\admin\model\Plugin as PluginModel;
 use think\Db;
 use think\facade\Cache;
 use think\facade\Env;
-use think\facade\Hook;
+use think\facade\Event;
 use util\Database;
 use util\File;
 use util\PHPZip;
@@ -40,7 +40,7 @@ class Module extends Admin
         }
 
         // 监听tab钩子
-        Hook::listen('module_index_tab_list', $tab_list);
+        Event::trigger('module_index_tab_list', $tab_list);
 
         switch ($group) {
             case 'local':

@@ -15,18 +15,46 @@ if (!function_exists('url')) {
      */
     function url($url = '', $vars = '', $suffix = true, $domain = false)
     {
+        // 如果URL已经包含模块/控制器信息，直接生成
+        if (strpos($url, '/') !== false) {
+            // 将字符串参数转换为数组
+            if (is_string($vars) && !empty($vars)) {
+                parse_str($vars, $vars);
+            }
+            if ($vars === '') {
+                $vars = [];
+            }
+
+            return (string) \think\facade\Route::buildUrl($url, $vars)->suffix($suffix)->domain($domain);
+        }
+
+        // 如果只是方法名，需要补充模块和控制器信息
+        $request = \think\facade\Request::instance();
+        $pathInfo = $request->pathinfo();
+        $parts = explode('/', trim($pathInfo, '/'));
+
+        // 获取当前模块和控制器
+        $module = '';
+        $controller = '';
+
+        if (count($parts) >= 2) {
+            $module = $parts[0];
+            $controller = $parts[1];
+        }
+
+        // 构建完整的URL路径
+        $fullUrl = "{$module}/{$controller}/{$url}";
+
         // 将字符串参数转换为数组
         if (is_string($vars) && !empty($vars)) {
             parse_str($vars, $vars);
         }
-
-        // 如果是字符串且为空，转换为空数组
         if ($vars === '') {
             $vars = [];
         }
 
-        // 使用 Route facade 生成 URL
-        return (string) \think\facade\Route::buildUrl($url, $vars)->suffix($suffix)->domain($domain);
+        // 生成URL
+        return (string) \think\facade\Route::buildUrl($fullUrl, $vars)->suffix($suffix)->domain($domain);
     }
 }
 

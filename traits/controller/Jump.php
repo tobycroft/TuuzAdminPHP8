@@ -134,18 +134,18 @@ trait Jump
      */
     protected function redirect($url, $params = [], $code = 302, $with = [])
     {
-        // ThinkPHP 8 使用 response() 助手函数创建重定向响应
-        $response = response()->redirect($url, $code);
-
         if (is_integer($params)) {
             $code = $params;
             $params = [];
         }
 
-        // 添加参数
+        // 构建完整的URL
         if (!empty($params)) {
-            $response->params($params);
+            $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
         }
+
+        // ThinkPHP 8 使用 redirect() 助手函数创建重定向响应
+        $response = redirect($url, $code);
 
         // 添加隐式传参
         if (!empty($with)) {

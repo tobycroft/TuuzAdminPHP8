@@ -212,19 +212,13 @@ class Menu extends Model
      */
     public static function getLocation($id = '', $del_last_url = false, $check = true)
     {
-        // ThinkPHP 8 中获取模块名的方式
-        $route = \think\facade\Route::current();
-        $model = $route ? $route->getModule() : '';
+        // 从 PATH_INFO 中解析模块名、控制器名和方法名
+        $pathInfo = request()->pathinfo();
+        $parts = explode('/', trim($pathInfo, '/'));
         
-        // 如果无法获取模块名，从 PATH_INFO 中解析
-        if (empty($model)) {
-            $pathInfo = request()->pathinfo();
-            $parts = explode('/', trim($pathInfo, '/'));
-            $model = !empty($parts[0]) ? $parts[0] : 'admin';
-        }
-        
-        $controller = request()->controller();
-        $action = request()->action();
+        $model = !empty($parts[0]) ? $parts[0] : 'admin';
+        $controller = !empty($parts[1]) ? $parts[1] : request()->controller();
+        $action = !empty($parts[2]) ? $parts[2] : request()->action();
 
         if ($id != '') {
             $cache_name = 'location_menu_' . $id;

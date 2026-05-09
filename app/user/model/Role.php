@@ -5,6 +5,8 @@ namespace app\user\model;
 
 use app\admin\model\Menu as MenuModel;
 use think\Model;
+use think\facade\Cache;  // 添加 Cache facade
+use think\facade\Config;  // 添加 Config facade
 use util\Tree;
 
 /**
@@ -141,15 +143,15 @@ class Role extends Model
      */
     public function roleAuth()
     {
-        $menu_auth = cache('role_menu_auth_' . session('user_auth.role'));
+        $menu_auth = Cache::get('role_menu_auth_' . session('user_auth.role'));  // 使用 facade
         if (!$menu_auth) {
             $menu_auth = self::where('id', session('user_auth.role'))->value('menu_auth');
             $menu_auth = json_decode($menu_auth, true);
             $menu_auth = MenuModel::where('id', 'in', $menu_auth)->column('id,url_value');
         }
         // 非开发模式，缓存数据
-        if (config('develop_mode') == 0) {
-            cache('role_menu_auth_' . session('user_auth.role'), $menu_auth);
+        if (Config::get('develop_mode') == 0) {  // 使用 facade
+            Cache::set('role_menu_auth_' . session('user_auth.role'), $menu_auth);  // 使用 facade
         }
         return $menu_auth;
     }

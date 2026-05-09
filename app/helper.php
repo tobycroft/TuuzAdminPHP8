@@ -705,9 +705,9 @@ if (!function_exists('url')) {
         // 生成URL
         $result = (string) Route::buildUrl($fullUrl, $vars)->suffix($suffix)->domain($domain);
 
-        // 调试信息（可以删除）
-        // echo "fullUrl: {$fullUrl}<br>";
-        // echo "result: {$result}<br>";
+         调试信息（可以删除）
+         echo "fullUrl: {$fullUrl}<br>";
+         echo "result: {$result}<br>";
 
         return $result;
     }

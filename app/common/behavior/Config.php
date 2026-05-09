@@ -40,33 +40,38 @@ class Config
             }
         }
 
-        // 获取入口目录
+        // 获取入口目录（使用绝对路径）
         $base_file = Request::baseFile();
         $base_dir = substr($base_file, 0, strripos($base_file, '/') + 1);
+
+        // 确保 PUBLIC_PATH 以 / 开头（绝对路径）
+        if (strpos($base_dir, '/') !== 0) {
+            $base_dir = '/' . $base_dir;
+        }
         define('PUBLIC_PATH', $base_dir);
 
-        // 视图输出字符串内容替换
+        // 视图输出字符串内容替换（使用绝对路径）
         $view_replace_str = [
-            // 静态资源目录
-            '__STATIC__' => PUBLIC_PATH . 'static',
-            // 文件上传目录
-            '__UPLOADS__' => PUBLIC_PATH . 'uploads',
-            // JS插件目录
-            '__LIBS__' => PUBLIC_PATH . 'static/libs',
-            // 后台CSS目录
-            '__ADMIN_CSS__' => PUBLIC_PATH . 'static/admin/css',
-            // 后台JS目录
-            '__ADMIN_JS__' => PUBLIC_PATH . 'static/admin/js',
-            // 后台IMG目录
-            '__ADMIN_IMG__' => PUBLIC_PATH . 'static/admin/img',
-            // 前台CSS目录
-            '__HOME_CSS__' => PUBLIC_PATH . 'static/home/css',
-            // 前台JS目录
-            '__HOME_JS__' => PUBLIC_PATH . 'static/home/js',
-            // 前台IMG目录
-            '__HOME_IMG__' => PUBLIC_PATH . 'static/home/img',
-            // 表单项扩展目录
-            '__EXTEND_FORM__' => PUBLIC_PATH . 'extend/form'
+            // 静态资源目录（绝对路径）
+            '__STATIC__' => '/static',
+            // 文件上传目录（绝对路径）
+            '__UPLOADS__' => '/uploads',
+            // JS插件目录（绝对路径）
+            '__LIBS__' => '/static/libs',
+            // 后台CSS目录（绝对路径）
+            '__ADMIN_CSS__' => '/static/admin/css',
+            // 后台JS目录（绝对路径）
+            '__ADMIN_JS__' => '/static/admin/js',
+            // 后台IMG目录（绝对路径）
+            '__ADMIN_IMG__' => '/static/admin/img',
+            // 前台CSS目录（绝对路径）
+            '__HOME_CSS__' => '/static/home/css',
+            // 前台JS目录（绝对路径）
+            '__HOME_JS__' => '/static/home/js',
+            // 前台IMG目录（绝对路径）
+            '__HOME_IMG__' => '/static/home/img',
+            // 表单项扩展目录（绝对路径）
+            '__EXTEND_FORM__' => '/extend/form'
         ];
         config('template.tpl_replace_string', $view_replace_str);
 
@@ -103,13 +108,13 @@ class Config
             }
         }
 
-        // 定义模块资源目录
-        config('template.tpl_replace_string.__MODULE_CSS__', PUBLIC_PATH . 'static/' . $module . '/css');
-        config('template.tpl_replace_string.__MODULE_JS__', PUBLIC_PATH . 'static/' . $module . '/js');
-        config('template.tpl_replace_string.__MODULE_IMG__', PUBLIC_PATH . 'static/' . $module . '/img');
-        config('template.tpl_replace_string.__MODULE_LIBS__', PUBLIC_PATH . 'static/' . $module . '/libs');
+        // 定义模块资源目录（使用绝对路径）
+        config('template.tpl_replace_string.__MODULE_CSS__', '/static/' . $module . '/css');
+        config('template.tpl_replace_string.__MODULE_JS__', '/static/' . $module . '/js');
+        config('template.tpl_replace_string.__MODULE_IMG__', '/static/' . $module . '/img');
+        config('template.tpl_replace_string.__MODULE_LIBS__', '/static/' . $module . '/libs');
         // 静态文件目录
-        config('public_static_path', PUBLIC_PATH . 'static/');
+        config('public_static_path', '/static/');
 
         // 读取系统配置
         $system_config = cache('system_config');

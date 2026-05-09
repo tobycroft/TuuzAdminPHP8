@@ -8,6 +8,7 @@ use think\App;
 use think\exception\ValidateException;
 use think\facade\Config;
 use think\facade\Db;
+use think\facade\Request;
 use think\facade\View;
 use think\Validate;
 
@@ -122,6 +123,29 @@ abstract class BaseController
      */
     protected function fetch($template = '', $vars = [], $config = [])
     {
+        // 调试模式：输出实际的模板路径
+        if (config('app.debug')) {
+            $request = Request::instance();
+            $module = $request->module();
+            $controller = parse_name($request->controller());
+            $action = $request->action();
+
+            // 构建模板路径
+            if (empty($template)) {
+                $template = "{$controller}/{$action}";
+            }
+
+            // 获取实际的模板文件路径
+            $viewPath = $this->app->getRootPath() . "app/{$module}/view/{$template}.html";
+
+            // 输出调试信息
+            echo '<pre>';
+            echo "当前请求: {$module}/{$controller}/{$action}\n";
+            echo "模板文件: {$viewPath}\n";
+            echo '文件是否存在: ' . (file_exists($viewPath) ? '是' : '否') . "\n";
+            echo '</pre>';
+        }
+
         return View::fetch($template, $vars, $config);
     }
 

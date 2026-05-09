@@ -3,10 +3,10 @@
 
 namespace app\admin\controller;
 
+use app\admin\builder\ZBuilder;
 use app\admin\model\Icon as IconModel;
 use app\admin\model\Menu as MenuModel;
 use app\admin\model\Module as ModuleModel;
-use app\common\builder\ZBuilder;
 use app\common\controller\Common;
 use app\user\model\Message as MessageModel;
 use app\user\model\Role as RoleModel;

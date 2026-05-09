@@ -151,6 +151,11 @@ abstract class BaseController
             if (file_exists($templatePath)) {
                 return View::fetch($templatePath, $vars, $config);
             }
+        } else {
+            $templatePath = $this->app->getAppPath() . "{$module}/view/index/index.html";
+            if (file_exists($templatePath)) {
+                return View::fetch($templatePath, $vars, $config);
+            }
         }
 
         return View::fetch($template, $vars, $config);

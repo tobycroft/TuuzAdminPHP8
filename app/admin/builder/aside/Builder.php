@@ -3,7 +3,7 @@
 
 namespace app\common\builder\aside;
 
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 
 /**
  * 侧栏构建器

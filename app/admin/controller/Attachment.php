@@ -4,7 +4,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\Attachment as AttachmentModel;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 use think\Db;
 use think\facade\Env;
 use think\facade\Event;

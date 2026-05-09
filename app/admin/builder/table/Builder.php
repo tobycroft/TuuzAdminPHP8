@@ -4,7 +4,7 @@
 namespace app\common\builder\table;
 
 use app\admin\model\Menu;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 use app\user\model\Role;
 use think\facade\Cache;
 use think\facade\Env;

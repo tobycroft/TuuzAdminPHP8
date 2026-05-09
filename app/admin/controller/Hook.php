@@ -6,7 +6,7 @@ namespace app\admin\controller;
 use app\admin\model\Hook as HookModel;
 use app\admin\model\HookPlugin;
 use app\admin\model\HookPlugin as HookPluginModel;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 
 /**
  * 钩子控制器

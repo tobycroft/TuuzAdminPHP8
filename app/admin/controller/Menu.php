@@ -5,7 +5,7 @@ namespace app\admin\controller;
 
 use app\admin\model\Menu as MenuModel;
 use app\admin\model\Module as ModuleModel;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 use app\user\model\Role as RoleModel;
 use think\facade\Cache;
 

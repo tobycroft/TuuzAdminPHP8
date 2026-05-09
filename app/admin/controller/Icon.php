@@ -5,7 +5,7 @@ namespace app\admin\controller;
 
 use app\admin\model\Icon as IconModel;
 use app\admin\model\IconList as IconListModel;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 
 /**
  * 图标控制器

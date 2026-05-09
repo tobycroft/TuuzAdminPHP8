@@ -3,7 +3,7 @@
 
 namespace app\admin\controller;
 
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 use think\Db;
 use util\Database as DatabaseModel;
 

@@ -4,7 +4,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\Config as ConfigModel;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 
 /**
  * 系统配置控制器

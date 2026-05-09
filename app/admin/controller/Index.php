@@ -3,7 +3,7 @@
 
 namespace app\admin\controller;
 
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 use app\user\model\User;
 use think\facade\Cache;
 use think\facade\Env;

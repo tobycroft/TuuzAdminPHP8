@@ -5,7 +5,7 @@ namespace app\admin\controller;
 
 use app\admin\model\HookPlugin as HookPluginModel;
 use app\admin\model\Plugin as PluginModel;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 use think\Db;
 use think\facade\Cache;
 use think\facade\Event;

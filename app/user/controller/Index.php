@@ -6,7 +6,7 @@ namespace app\user\controller;
 use app\admin\controller\Admin;
 use app\admin\model\Access as AccessModel;
 use app\admin\model\Module as ModuleModel;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 use app\user\model\Role as RoleModel;
 use app\user\model\User as UserModel;
 use think\Db;

@@ -5,7 +5,7 @@ namespace app\admin\controller;
 
 use app\admin\model\Action as ActionModel;
 use app\admin\model\Module as ModuleModel;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 
 /**
  * 行为管理控制器

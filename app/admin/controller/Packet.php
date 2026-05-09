@@ -4,7 +4,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\Packet as PacketModel;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 
 /**
  * 数据包控制器

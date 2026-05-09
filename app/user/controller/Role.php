@@ -5,7 +5,7 @@ namespace app\user\controller;
 
 use app\admin\controller\Admin;
 use app\admin\model\Menu as MenuModel;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 use app\user\model\Role as RoleModel;
 use think\Db;
 use util\Tree;

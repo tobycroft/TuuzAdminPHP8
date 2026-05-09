@@ -4,7 +4,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\Log as LogModel;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 
 /**
  * 系统日志控制器

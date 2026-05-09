@@ -4,7 +4,7 @@
 namespace app\user\controller;
 
 use app\admin\controller\Admin;
-use app\common\builder\ZBuilder;
+use app\admin\builder\ZBuilder;
 use app\user\model\Message as MessageModel;
 use app\user\model\Role as RoleModel;
 use app\user\model\User as UserModel;

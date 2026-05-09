@@ -45,10 +45,10 @@ class User extends Model
         $password = trim($password);
 
         // 匹配登录方式
-        if (preg_match("/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/", $username)) {
+        if (preg_match('/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/', $username)) {
             // 邮箱登录
             $map['email'] = $username;
-        } elseif (preg_match("/^1\d{10}$/", $username)) {
+        } elseif (preg_match('/^1\d{10}$/', $username)) {
             // 手机号登录
             $map['mobile'] = $username;
         } else {
@@ -58,8 +58,8 @@ class User extends Model
 
         $map['status'] = 1;
 
-        // 查找用户
-        $user = $this::get($map);
+        // 查找用户（修复：ThinkPHP 8 中 get() 只能接受字符串，使用 where()->find()）
+        $user = $this->where($map)->find();
         if (!$user) {
             $this->error = '用户不存在或被禁用！';
         } else {
@@ -80,10 +80,10 @@ class User extends Model
 
                 // 更新登录信息
                 $user['last_login_time'] = request()->time();
-                $user['last_login_ip']   = request()->ip(1);
+                $user['last_login_ip'] = request()->ip(1);
                 if ($user->save()) {
-                    // 自动登录
-                    return $this->autoLogin($this::get($uid), $rememberme);
+                    // 自动登录（修复：ThinkPHP 8 中 get() 只能接受字符串，使用 find()）
+                    return $this->autoLogin($this->find($uid), $rememberme);
                 } else {
                     // 更新登录信息失败
                     $this->error = '登录信息更新失败，请重新登录！';
@@ -104,15 +104,15 @@ class User extends Model
     {
         // 记录登录SESSION和COOKIES
         $auth = array(
-            'uid'             => $user->id,
-            'group'           => $user->group,
-            'role'            => $user->role,
-            'role_name'       => Db::name('admin_role')->where('id', $user->role)->value('name'),
-            'avatar'          => $user->avatar,
-            'username'        => $user->username,
-            'nickname'        => $user->nickname,
+            'uid' => $user->id,
+            'group' => $user->group,
+            'role' => $user->role,
+            'role_name' => Db::name('admin_role')->where('id', $user->role)->value('name'),
+            'avatar' => $user->avatar,
+            'username' => $user->username,
+            'nickname' => $user->nickname,
             'last_login_time' => $user->last_login_time,
-            'last_login_ip'   => get_client_ip(1),
+            'last_login_ip' => get_client_ip(1),
         );
         session('user_auth', $auth);
         session('user_auth_sign', data_auth_sign($auth));
@@ -131,7 +131,7 @@ class User extends Model
 
         // 记住登录
         if ($rememberme) {
-            $signin_token = $user->username.$user->id.$user->last_login_time;
+            $signin_token = $user->username . $user->id . $user->last_login_time;
             cookie('uid', $user->id, 24 * 3600 * 7);
             cookie('signin_token', data_auth_sign($signin_token), 24 * 3600 * 7);
         }

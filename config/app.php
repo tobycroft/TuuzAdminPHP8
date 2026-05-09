@@ -30,4 +30,12 @@ return [
     // 显示错误信息
     'show_error_msg' => true,
     'debug' => true,
+
+    // zbuilder 配置
+    'zbuilder' => [
+        'pop' => [],
+        'right_button' => [],
+        'search_button' => true,
+        'form_token_name' => '__token__',
+    ],
 ];

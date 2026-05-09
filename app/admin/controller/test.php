@@ -8,7 +8,7 @@ use app\common\controller\Common;
  * ie提示页面控制器
  * @package app\admin\controller
  */
-class Test
+class test
 {
     /**
      * 显示ie提示

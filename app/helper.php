@@ -199,7 +199,7 @@ if (!function_exists('class_uses_recursive')) {
 
 if (!function_exists('config')) {
     /**
-     * 获取和设置配置参数
+     * 获取和设置配置参数（适配ThinkPHP 8）
      * @param string|array $name 参数名
      * @param mixed $value 参数值
      * @return mixed
@@ -213,7 +213,14 @@ if (!function_exists('config')) {
 
             return 0 === strpos($name, '?') ? Config::has(substr($name, 1)) : Config::get($name);
         } else {
-            return Config::set($name, $value);
+            // ThinkPHP 8 中 Config::set() 的参数顺序是 (array $config, ?string $name = null)
+            if (is_array($name)) {
+                // 批量设置
+                return Config::set($name, $value);
+            } else {
+                // 单个设置，需要转换为数组格式
+                return Config::set([$name => $value]);
+            }
         }
     }
 }

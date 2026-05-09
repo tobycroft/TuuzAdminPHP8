@@ -466,7 +466,7 @@ if (!function_exists('lang')) {
 
 if (!function_exists('model')) {
     /**
-     * 实例化Model
+     * 实例化Model（TP8 兼容修复版）
      * @param string $name Model名称
      * @param string $layer 业务层名称
      * @param bool $appendSuffix 是否添加类名后缀
@@ -474,7 +474,17 @@ if (!function_exists('model')) {
      */
     function model($name = '', $layer = 'model', $appendSuffix = false)
     {
-        return app()->model($name, $layer, $appendSuffix);
+        // TP8 兼容写法：直接解析类名并实例化
+        if (empty($name)) {
+            return new \think\Model();
+        }
+
+        // 解析类命名空间
+        $name = parse_name($name, 1);
+        $class = 'app\\' . $layer . '\\' . $name;
+
+        // 实例化模型
+        return new $class();
     }
 }
 

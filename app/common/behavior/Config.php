@@ -139,7 +139,22 @@ class Config
 
         // 设置配置信息
         if (!empty($system_config)) {
-            config($system_config, 'app');
+            // 获取现有的 app 配置
+            $existingAppConfig = config('app.');
+            // 合并配置，确保不覆盖数组类型的配置项
+            foreach ($system_config as $key => $value) {
+                // 检查现有配置是否为数组
+                if (isset($existingAppConfig[$key]) && is_array($existingAppConfig[$key])) {
+                    // 如果现有配置是数组，且新值也是数组，则合并
+                    if (is_array($value)) {
+                        config($key, array_merge($existingAppConfig[$key], $value));
+                    }
+                    // 如果新值不是数组，保留原有数组配置
+                } else {
+                    // 如果现有配置不存在或不是数组，则设置新值
+                    config($key, $value);
+                }
+            }
         }
     }
 }

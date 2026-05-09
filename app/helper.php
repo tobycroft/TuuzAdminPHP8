@@ -209,8 +209,14 @@ if (!function_exists('config')) {
     {
         if (is_null($value) && is_string($name)) {
             if ('.' == substr($name, -1)) {
-                $config = Config::pull(substr($name, 0, -1));
-                return is_array($config) ? $config : [];
+                // 获取一级配置
+                $first = substr($name, 0, -1);
+                try {
+                    $config = Config::pull($first);
+                    return is_array($config) ? $config : [];
+                } catch (\TypeError $e) {
+                    return [];
+                }
             }
 
             if (0 === strpos($name, '?')) {
@@ -220,14 +226,23 @@ if (!function_exists('config')) {
             // 检查是否是二级配置（如 xxx.yyy）
             if (strpos($name, '.') !== false) {
                 list($first, $second) = explode('.', $name, 2);
-                // 先检查一级配置是否存在且为数组
-                $firstConfig = Config::pull($first);
-                if (!is_array($firstConfig)) {
+                // 先安全地获取一级配置
+                try {
+                    $firstConfig = Config::pull($first);
+                    if (!is_array($firstConfig)) {
+                        return null;
+                    }
+                } catch (\TypeError $e) {
                     return null;
                 }
             }
             
-            return Config::get($name);
+            // 安全地获取配置
+            try {
+                return Config::get($name);
+            } catch (\TypeError $e) {
+                return null;
+            }
         } else {
             // ThinkPHP 8 中 Config::set() 的参数顺序是 (array $config, ?string $name = null)
             if (is_array($name)) {

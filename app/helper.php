@@ -386,7 +386,7 @@ if (!function_exists('halt')) {
 
 if (!function_exists('input')) {
     /**
-     * 获取输入数据 支持默认值和过滤
+     * 获取输入数据 支持默认值和过滤 (TP8 兼容修复版)
      * @param string $key 获取的变量名
      * @param mixed $default 默认值
      * @param string $filter 过滤方法
@@ -394,26 +394,24 @@ if (!function_exists('input')) {
      */
     function input($key = '', $default = null, $filter = '')
     {
+        $has = false;
         if (0 === strpos($key, '?')) {
             $key = substr($key, 1);
             $has = true;
         }
 
-        if ($pos = strpos($key, '.')) {
-            // 指定参数来源
-            $method = substr($key, 0, $pos);
-            if (in_array($method, ['get', 'post', 'put', 'patch', 'delete', 'route', 'param', 'request', 'session', 'cookie', 'server', 'env', 'path', 'file'])) {
+        $method = 'param';
+        if (($pos = strpos($key, '.')) !== false) {
+            $m = substr($key, 0, $pos);
+            if (in_array($m, ['get', 'post', 'put', 'patch', 'delete', 'route', 'param', 'request', 'session', 'cookie', 'server', 'env', 'path', 'file'])) {
+                $method = $m;
                 $key = substr($key, $pos + 1);
-            } else {
-                $method = 'param';
             }
-        } else {
-            // 默认为自动判断
-            $method = 'param';
         }
 
-        if (isset($has)) {
-            return request()->has($key, $method, $default);
+        if ($has) {
+            // TP8 修复：has() 只支持 2 个参数
+            return request()->has($key, $method);
         } else {
             return request()->$method($key, $default, $filter);
         }

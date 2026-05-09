@@ -175,12 +175,12 @@ class Config
                 
                 if (isset($configArray[$coreKey]) && !is_array($configArray[$coreKey])) {
                     // 如果核心配置不是数组，重置为空数组
-                    Config::set([], $coreKey);
+                    \think\facade\Config::set([], $coreKey);
                 }
             } catch (\Exception $e) {
                 // 如果出现任何错误，重置为空数组
                 try {
-                    Config::set([], $coreKey);
+                    \think\facade\Config::set([], $coreKey);
                 } catch (\Exception $e2) {
                     // 忽略进一步的错误
                 }

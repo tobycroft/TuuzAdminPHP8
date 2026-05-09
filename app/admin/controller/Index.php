@@ -30,7 +30,7 @@ class Index extends Admin
             ->where('id', 1)
             ->value('password');
 
-        if (UID == 1 && $admin_pass && Hash::check('admin', $admin_pass)) {
+        if (UID == 1 && $admin_pass && password_verify('admin', $admin_pass)) {
             $this->assign('default_pass', 1);
         }
         return $this->fetch();

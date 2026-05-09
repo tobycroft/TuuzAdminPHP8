@@ -150,7 +150,8 @@ class Role extends Model
             $menu_auth = MenuModel::where('id', 'in', $menu_auth)->column('id,url_value');
         }
         // 非开发模式，缓存数据
-        if (Config::get('develop_mode') == 0) {  // 使用 facade
+        $developMode = config_old('develop_mode', 0);
+        if ($developMode == 0) {
             Cache::set('role_menu_auth_' . session('user_auth.role'), $menu_auth);  // 使用 facade
         }
         return $menu_auth;

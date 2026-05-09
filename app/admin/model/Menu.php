@@ -229,13 +229,14 @@ class Menu extends Model
                 ['pid', '<>', 0],
                 ['url_value', '=', strtolower($model . '/' . trim(preg_replace("/[A-Z]/", "_\\0", $controller), "_") . '/' . $action)]
             ];
-
+            var_dump(self::where($map)
+                ->value('id'));
             // 当前操作对应的节点ID
             $curr_id = $id == '' ? self::where($map)
                 ->value('id') : $id;
 
             // 获取节点ID是所有父级节点
-            $location = Tree::getParents(self::column('id,pid,title,url_value,params')->toArray(), $curr_id);
+            $location = Tree::getParents(self::column('id,pid,title,url_value,params'), $curr_id);
 
             var_dump($location);
 

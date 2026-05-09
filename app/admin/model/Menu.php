@@ -167,6 +167,12 @@ class Menu extends Model
         if (!$menus) {
             // 获取当前节点地址
             $location = self::getLocation($id);
+            
+            // 如果获取不到节点位置，返回空数组
+            if (empty($location)) {
+                return [];
+            }
+            
             // 当前顶级节点id
             $top_id = $location[0]['id'];
             // 获取顶级节点下的所有节点

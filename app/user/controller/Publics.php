@@ -75,7 +75,7 @@ class Publics extends Common
                 $this->jumpUrl();
             } else {
                 // 显式指定模板路径
-                return $this->fetch(app()->getAppPath() . 'user/view/publics/signin.html');
+                return $this->fetch(app()->getAppPath() . 'admin/user/view/publics/signin.html');
             }
         }
     }

@@ -156,7 +156,10 @@ class Config
                     config($key, array_merge($existingConfig, $value));
                 } else if ($existingConfig === null || !is_array($existingConfig)) {
                     // 如果现有配置不存在或不是数组，则设置新值
-                    config($key, $value);
+                    // 但如果新值是数组而旧值是字符串，不覆盖
+                    if (!is_array($value)) {
+                        config($key, $value);
+                    }
                 }
                 // 如果现有配置是数组但新值不是，保留原有数组配置
             }

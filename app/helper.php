@@ -223,17 +223,36 @@ if (!function_exists('config')) {
                 return Config::has(substr($name, 1));
             }
             
-            // 检查是否是二级配置（如 xxx.yyy）
+            // 如果是二级配置（如 xxx.yyy），使用反射直接访问配置数组
             if (strpos($name, '.') !== false) {
-                list($first, $second) = explode('.', $name, 2);
-                // 先安全地获取一级配置
                 try {
-                    $firstConfig = Config::pull($first);
-                    if (!is_array($firstConfig)) {
+                    // 使用容器获取配置实例
+                    $configInstance = \think\App::getInstance()->container->get('think\Config');
+                    
+                    // 使用反射访问私有配置数组
+                    $reflection = new \ReflectionClass($configInstance);
+                    $property = $reflection->getProperty('config');
+                    $property->setAccessible(true);
+                    $configArray = $property->getValue($configInstance);
+                    
+                    // 解析配置路径
+                    $keys = explode('.', $name);
+                    $result = $configArray;
+                    foreach ($keys as $key) {
+                        if (isset($result[$key])) {
+                            $result = $result[$key];
+                        } else {
+                            return null;
+                        }
+                    }
+                    return $result;
+                } catch (\Exception $e) {
+                    // 如果反射失败，使用原始方法并捕获类型错误
+                    try {
+                        return Config::get($name);
+                    } catch (\TypeError $e) {
                         return null;
                     }
-                } catch (\TypeError $e) {
-                    return null;
                 }
             }
             

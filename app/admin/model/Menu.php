@@ -237,7 +237,7 @@ class Menu extends Model
             // 获取节点ID是所有父级节点
             $location = Tree::getParents(self::column('id,pid,title,url_value,params'), $curr_id);
 
-            var_dump($location);
+            var_dump(self::column('id,pid,title,url_value,params'));
 
             if ($check && empty($location)) {
                 throw new Exception('获取不到当前节点地址，可能未添加节点', 9001);

@@ -660,45 +660,32 @@ if (!function_exists('url')) {
             if ($vars === '') {
                 $vars = [];
             }
-            
+
             return (string) Route::buildUrl($url, $vars)->suffix($suffix)->domain($domain);
         }
-        
+
         // 如果只是方法名，需要补充模块和控制器信息
         $request = Request::instance();
-        
-        // 优先从路由参数中获取模块和控制器
-        $routeModule = $request->param('module', '');
-        $routeController = $request->param('controller', '');
-        $routeRealModule = $request->param('realModule', '');
-        
-        // 从pathinfo中解析
+
+        // 获取当前请求的完整路径
         $pathInfo = $request->pathinfo();
         $parts = explode('/', trim($pathInfo, '/'));
-        
-        // 获取当前模块和控制器
+
+        // 获取当前模块、控制器和动作
         $module = '';
         $controller = '';
-        
-        // 优先使用路由参数
-        if (!empty($routeRealModule)) {
-            $module = $routeRealModule;
-        } elseif (!empty($routeModule)) {
-            $module = $routeModule;
-        } elseif (count($parts) >= 1) {
+
+        // 从路径中解析模块和控制器
+        if (count($parts) >= 1) {
             $module = $parts[0];
         }
-        
-        // 获取控制器
-        if (!empty($routeController)) {
-            $controller = $routeController;
-        } elseif (count($parts) >= 2) {
+        if (count($parts) >= 2) {
             $controller = $parts[1];
         }
-        
-        // 构建完整的URL路径
+
+        // 构建完整的URL路径（只替换最后一个动作名）
         $fullUrl = "{$module}/{$controller}/{$url}";
-        
+
         // 将字符串参数转换为数组
         if (is_string($vars) && !empty($vars)) {
             parse_str($vars, $vars);
@@ -706,7 +693,7 @@ if (!function_exists('url')) {
         if ($vars === '') {
             $vars = [];
         }
-        
+
         // 生成URL
         return (string) Route::buildUrl($fullUrl, $vars)->suffix($suffix)->domain($domain);
     }

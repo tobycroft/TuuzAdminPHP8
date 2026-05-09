@@ -50,7 +50,7 @@ class ZBuilder extends Common
         }
 
         // 构造器类路径
-        $class = '\\app\\common\\builder\\' . $type . '\\Builder';
+        $class = '\\app\\admin\\builder\\' . $type . '\\Builder';
         if (!class_exists($class)) {
             throw new Exception($type . '构建器不存在', 8002);
         }

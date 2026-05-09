@@ -667,8 +667,16 @@ if (!function_exists('url')) {
         // 如果只是方法名，需要补充模块和控制器信息
         $request = Request::instance();
 
-        // 获取当前请求的完整路径
+        // 获取当前请求的完整路径（多种方式）
         $pathInfo = $request->pathinfo();
+        $urlPath = $request->url();
+        $baseFile = $request->baseFile();
+
+        // 调试信息（可以删除）
+        // echo "pathInfo: {$pathInfo}<br>";
+        // echo "url: {$urlPath}<br>";
+        // echo "baseFile: {$baseFile}<br>";
+
         $parts = explode('/', trim($pathInfo, '/'));
 
         // 获取当前模块、控制器和动作
@@ -695,7 +703,13 @@ if (!function_exists('url')) {
         }
 
         // 生成URL
-        return (string) Route::buildUrl($fullUrl, $vars)->suffix($suffix)->domain($domain);
+        $result = (string) Route::buildUrl($fullUrl, $vars)->suffix($suffix)->domain($domain);
+
+        // 调试信息（可以删除）
+        // echo "fullUrl: {$fullUrl}<br>";
+        // echo "result: {$result}<br>";
+
+        return $result;
     }
 }
 

@@ -27,8 +27,7 @@
     "topthink/think-helper": "^3.1",
     "ezyang/htmlpurifier": "^4.16",
     "ext-curl": "*",
-    "tobycroft/aoss-sdk": "^1.0",
-
+    "tobycroft/aoss-sdk": "^1.0"
   },
   "require-dev": {
     "symfony/var-dumper": ">=4.2",
@@ -36,11 +35,15 @@
   },
   "autoload": {
     "psr-4": {
-      "app\\": "app"
+      "app\\": "app",
+      "traits\\": "traits/"
     },
     "psr-0": {
       "": "extend/"
-    }
+    },
+    "files": [
+      "app/helper.php"
+    ]
   },
   "config": {
     "preferred-install": "dist"

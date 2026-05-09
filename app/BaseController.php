@@ -122,31 +122,6 @@ abstract class BaseController
      */
     protected function fetch($template = '', $vars = [], $config = [])
     {
-        // 如果指定了模板名，直接使用
-        if (!empty($template)) {
-            return View::fetch($template, $vars, $config);
-        }
-
-        // 如果没有指定模板名，根据URL路径自动解析
-        $pathInfo = $this->request->pathinfo();
-        $parts = explode('/', trim($pathInfo, '/'));
-
-        // URL格式: admin/module/controller/action 或 admin/controller/action
-        if (count($parts) >= 2) {
-            $module = $parts[0];  // 取第一个部分作为模块
-            $controller = $parts[1];  // 取第二个部分作为控制器
-            $action = isset($parts[2]) ? $parts[2] : 'index';  // 取第三个部分作为方法
-
-            // 构建模板路径
-            $templatePath = $this->app->getAppPath() . "{$module}/view/{$controller}/{$action}.html";
-
-            // 如果文件存在，使用完整路径
-            if (file_exists($templatePath)) {
-                return View::fetch($templatePath, $vars, $config);
-            }
-        }
-
-        // 默认情况：调用原始的 View::fetch
         return View::fetch($template, $vars, $config);
     }
 

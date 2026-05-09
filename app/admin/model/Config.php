@@ -27,24 +27,24 @@ class Config extends Model
         $configs = self::column('value,type', 'name');
 
         $result = [];
-        foreach ($configs as $config) {
+        foreach ($configs as $config_name => $config) {
             switch ($config['type']) {
                 case 'array':
-                    $result[$config['name']] = parse_attr($config['value']);
+                    $result[$config_name] = parse_attr($config['value']);
                     break;
                 case 'checkbox':
                     if ($config['value'] != '') {
-                        $result[$config['name']] = explode(',', $config['value']);
+                        $result[$config_name] = explode(',', $config['value']);
                     } else {
-                        $result[$config['name']] = [];
+                        $result[$config_name] = [];
                     }
                     break;
                 default:
-                    $result[$config['name']] = $config['value'];
+                    $result[$config_name] = $config['value'];
                     break;
             }
         }
 
-        return $name != '' ? $result[$name] : $result;
+        return $name != '' ? ($result[$name] ?? null) : $result;
     }
 }

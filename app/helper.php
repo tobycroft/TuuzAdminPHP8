@@ -44,7 +44,8 @@ if (!function_exists('abort')) {
         if ($code instanceof Response) {
             throw new HttpResponseException($code);
         } else {
-            throw new HttpException($code, $message, null, $header);
+            // ThinkPHP 8 要求 $message 必须是字符串类型
+            throw new HttpException($code, (string) $message, null, $header);
         }
     }
 }

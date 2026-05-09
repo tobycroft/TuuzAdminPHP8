@@ -27,7 +27,8 @@
     "topthink/think-helper": "^3.1",
     "ezyang/htmlpurifier": "^4.16",
     "ext-curl": "*",
-    "tobycroft/aoss-sdk": "^1.0"
+    "tobycroft/aoss-sdk": "^1.0",
+    "topthink/think-view": "^2.0"
   },
   "require-dev": {
     "symfony/var-dumper": ">=4.2",

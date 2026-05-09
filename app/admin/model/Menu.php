@@ -159,7 +159,7 @@ class Menu extends Model
      */
     public static function getSidebarMenu($id = '', $module = '', $controller = '')
     {
-        $module = $module == '' ?  : $module;
+        $module = $module == '' ?: $module;
         $controller = $controller == '' ? request()->controller() : $controller;
         $cache_tag = strtolower('_sidebar_menus_' . $module . '_' . $controller) . '_role_' . session('user_auth.role');
         $menus = cache($cache_tag);
@@ -236,6 +236,8 @@ class Menu extends Model
 
             // 获取节点ID是所有父级节点
             $location = Tree::getParents(self::column('id,pid,title,url_value,params'), $curr_id);
+
+            var_dump($location);
 
             if ($check && empty($location)) {
                 throw new Exception('获取不到当前节点地址，可能未添加节点', 9001);

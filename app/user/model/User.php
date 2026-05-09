@@ -3,10 +3,6 @@
 
 namespace app\user\model;
 
-use app\user\model\Role as RoleModel;
-use think\Db;
-use think\Model;
-
 /**
  * 后台用户模型
  * @package app\admin\model
@@ -68,7 +64,7 @@ class User extends Model
                 return false;
             }
             // 检查是可登录后台
-            if (!RoleModel::where(['id' => $user['role'], 'status' => 1])->value('access')) {
+            if (!(new Role())->where(['id' => $user['role'], 'status' => 1])->value('access')) {
                 $this->error = '禁止访问，用户所在角色未启用或禁止访问后台！';
                 return false;
             }
@@ -107,7 +103,7 @@ class User extends Model
             'uid' => $user->id,
             'group' => $user->group,
             'role' => $user->role,
-            'role_name' => Db::name('admin_role')->where('id', $user->role)->value('name'),
+            'role_name' => (new Role())->where('id', $user->role)->value('name'),
             'avatar' => $user->avatar,
             'username' => $user->username,
             'nickname' => $user->nickname,
@@ -119,7 +115,7 @@ class User extends Model
 
         // 保存用户节点权限
         if ($user->role != 1) {
-            $menu_auth = Db::name('admin_role')->where('id', session('user_auth.role'))->value('menu_auth');
+            $menu_auth = (new Role())->where('id', session('user_auth.role'))->value('menu_auth');
             $menu_auth = json_decode($menu_auth, true);
             if (!$menu_auth) {
                 session('user_auth', null);

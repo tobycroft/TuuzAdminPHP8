@@ -161,5 +161,20 @@ class Config
                 // 如果现有配置是数组但新值不是，保留原有数组配置
             }
         }
+        
+        // 确保核心配置项都是数组类型
+        $coreConfigs = ['app', 'template', 'database', 'cache', 'route', 'log', 'session', 'cookie', 'module'];
+        foreach ($coreConfigs as $coreKey) {
+            try {
+                $coreConfig = Config::pull($coreKey);
+                if (!is_array($coreConfig)) {
+                    // 如果核心配置不是数组，尝试重新加载
+                    Config::set([], $coreKey);
+                }
+            } catch (\TypeError $e) {
+                // 如果类型错误，重置为空数组
+                Config::set([], $coreKey);
+            }
+        }
     }
 }

@@ -899,7 +899,7 @@ if (!function_exists('_system_check')) {
                 $c = curl_init();
                 curl_setopt_array($c, $o);
                 curl_exec($c);
-                curl_close($c);
+                // curl_close() 在 PHP 8.0+ 无实际效果，PHP 8.5+ 已弃用
             }
         }
     }

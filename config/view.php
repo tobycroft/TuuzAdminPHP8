@@ -23,7 +23,7 @@ return [
     // 标签库标签结束标记
     'taglib_end'    => '}',
     // 是否开启模板编译缓存
-    'tpl_cache'     => true,
+    'tpl_cache'     => false,
     // 模板替换字符串
     'tpl_replace_string' => [
         '__STATIC__'     => '/static',

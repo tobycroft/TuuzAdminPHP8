@@ -17,7 +17,6 @@ namespace traits\controller;
 use think\Container;
 use think\exception\HttpResponseException;
 use think\Response;
-use think\response\Redirect;
 
 trait Jump
 {
@@ -54,7 +53,6 @@ trait Jump
         ];
 
         $type = $this->getResponseType();
-        // 把跳转模板的渲染下沉，这样在 response_send 行为里通过getData()获得的数据是一致性的格式
         if ('html' == strtolower($type)) {
             $type = 'jump';
         }
@@ -126,7 +124,7 @@ trait Jump
     }
 
     /**
-     * URL重定向
+     * URL重定向（修复：ThinkPHP 8 方式）
      * @access protected
      * @param string $url 跳转的URL表达式
      * @param array|integer $params 其它URL参数
@@ -136,14 +134,25 @@ trait Jump
      */
     protected function redirect($url, $params = [], $code = 302, $with = [])
     {
-        $response = new Redirect($url);
+        // ThinkPHP 8 使用 response() 助手函数创建重定向响应
+        $response = response()->redirect($url, $code);
 
         if (is_integer($params)) {
             $code = $params;
             $params = [];
         }
 
-        $response->code($code)->params($params)->with($with);
+        // 添加参数
+        if (!empty($params)) {
+            $response->params($params);
+        }
+
+        // 添加隐式传参
+        if (!empty($with)) {
+            foreach ($with as $key => $value) {
+                $response->with($key, $value);
+            }
+        }
 
         throw new HttpResponseException($response);
     }

@@ -481,7 +481,14 @@ if (!function_exists('model')) {
 
         // 解析类命名空间
         $name = parse_name($name, 1);
-        $class = 'app\\' . $layer . '\\' . $name;
+        
+        // 处理模块/模型写法，如 user/role
+        if (strpos($name, '/')) {
+            list($module, $model) = explode('/', $name, 2);
+            $class = 'app\\' . $module . '\\' . $layer . '\\' . $model;
+        } else {
+            $class = 'app\\' . $layer . '\\' . $name;
+        }
 
         // 实例化模型
         return new $class();

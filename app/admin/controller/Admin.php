@@ -437,6 +437,8 @@ class Admin extends Common
 
         // 如果不是ajax请求，则读取菜单
         if (!$this->request->isAjax()) {
+            // 弹窗模式标识
+            $this->assign('_pop', $this->request->get('_pop', 0));
             // 读取顶部菜单
             $this->assign('_top_menus', MenuModel::getTopMenu(config_old('top_menu_max'), '_top_menus'));
             // 读取全部顶级菜单

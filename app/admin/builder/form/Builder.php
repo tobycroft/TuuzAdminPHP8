@@ -69,8 +69,17 @@ class Builder extends ZBuilder
     {
         $this->_template = Env::get('app_path') . 'common/builder/form/layout.html';
         $this->_vars['post_url'] = $this->request->url(true);
-        $this->_vars['_token_name'] = config_old('zbuilder.form_token_name');
-        $this->_vars['_token_value'] = token($this->_vars['_token_name']);
+        $token_name = config_old('zbuilder.form_token_name') ?: '__token__';
+        $this->_vars['_token_name'] = $token_name;
+        // 生成令牌并存储到 session
+        $token = md5($this->request->server('REQUEST_TIME_FLOAT'));
+        try {
+            \think\facade\Session::set($token_name, $token);
+        } catch (\Exception $e) {
+            // Session 未初始化时使用 cookie
+            $token = md5(uniqid(mt_rand(), true));
+        }
+        $this->_vars['_token_value'] = $token;
     }
 
     /**

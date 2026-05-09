@@ -50,7 +50,7 @@ class Publics extends Common
             }
 
             // 登录
-            $UserModel = new UserModel;
+            $UserModel = new UserModel ;
             $uid = $UserModel->login($data['username'], $data['password'], $rememberme);
             if ($uid) {
                 // 记录行为
@@ -74,7 +74,8 @@ class Publics extends Common
             if (is_signin()) {
                 $this->jumpUrl();
             } else {
-                return $this->fetch();
+                // 显式指定模板路径
+                return $this->fetch(app()->getAppPath() . 'user/view/publics/signin.html');
             }
         }
     }
@@ -89,8 +90,8 @@ class Publics extends Common
             $this->success('登录成功', url('admin/index/index'));
         }
 
-        $default_module = RoleModel::where('id', session('user_auth.role'))->value('default_module');
-        $menu = MenuModel::get($default_module);
+        $default_module = RoleModel :: where ('id', session('user_auth.role'))->value('default_module');
+        $menu = MenuModel :: get ($default_module);
         if (!$menu) {
             $this->error('当前角色未指定默认跳转模块！');
         }
@@ -102,7 +103,7 @@ class Publics extends Common
         $menu_url = explode('/', $menu['url_value']);
         role_auth();
 
-        $menus = MenuModel::getSidebarMenu($default_module, $menu['module'], $menu_url[1]);
+        $menus = MenuModel :: getSidebarMenu ($default_module, $menu['module'], $menu_url[1]);
         $url   = '';
         foreach ($menus as $key => $menu) {
             if (!empty($menu['url_value'])) {

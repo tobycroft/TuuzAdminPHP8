@@ -5,7 +5,6 @@ namespace app\user\model;
 
 use app\admin\model\Menu as MenuModel;
 use think\Model;
-use util\Tree;
 
 /**
  * 角色模型

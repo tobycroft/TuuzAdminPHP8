@@ -25,15 +25,15 @@ function findController($module, $controller) {
     return false;
 }
 
-// 静态资源文件扩展名
-$staticExtensions = ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'ico', 'woff', 'woff2', 'ttf', 'eot'];
-
 // 完整路由：支持 /admin/module/controller/function/param 格式
 \think\facade\Route::any('admin/:realModule/:controller/:function/[:param]', function ($realModule, $controller, $function, $param = '') {
+    // 静态资源文件扩展名
+    $staticExtensions = ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'ico', 'woff', 'woff2', 'ttf', 'eot'];
+
     // 检查是否是静态资源请求
     $pathInfo = \think\facade\Request::instance()->pathinfo();
     $extension = strtolower(pathinfo($pathInfo, PATHINFO_EXTENSION));
-    if (in_array($extension, $GLOBALS['staticExtensions'])) {
+    if (in_array($extension, $staticExtensions)) {
         // 静态资源直接返回404（由Web服务器处理）
         return abort(404);
     }
@@ -82,10 +82,13 @@ $staticExtensions = ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'ico', 'wo
 
 // 简化路由：/admin/module/controller
 \think\facade\Route::any('admin/:realModule/:controller', function ($realModule, $controller) {
+    // 静态资源文件扩展名
+    $staticExtensions = ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'ico', 'woff', 'woff2', 'ttf', 'eot'];
+
     // 检查是否是静态资源请求
     $pathInfo = \think\facade\Request::instance()->pathinfo();
     $extension = strtolower(pathinfo($pathInfo, PATHINFO_EXTENSION));
-    if (in_array($extension, $GLOBALS['staticExtensions'])) {
+    if (in_array($extension, $staticExtensions)) {
         return abort(404);
     }
 
@@ -160,10 +163,13 @@ $staticExtensions = ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'ico', 'wo
 
 // 前台路由：/:controller/:function/[:param]
 \think\facade\Route::any(':controller/:function/[:param]', function ($controller, $function, $param = '') {
+    // 静态资源文件扩展名
+    $staticExtensions = ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'ico', 'woff', 'woff2', 'ttf', 'eot'];
+
     // 检查是否是静态资源请求
     $pathInfo = \think\facade\Request::instance()->pathinfo();
     $extension = strtolower(pathinfo($pathInfo, PATHINFO_EXTENSION));
-    if (in_array($extension, $GLOBALS['staticExtensions'])) {
+    if (in_array($extension, $staticExtensions)) {
         return abort(404);
     }
 

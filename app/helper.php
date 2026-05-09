@@ -651,6 +651,9 @@ if (!function_exists('url')) {
      */
     function url($url = '', $vars = '', $suffix = true, $domain = false)
     {
+        $request = Request::instance();
+        $baseFile = $request->baseFile();
+
         // 如果URL已经包含模块/控制器信息，直接生成
         if (strpos($url, '/') !== false) {
             // 将字符串参数转换为数组
@@ -661,29 +664,22 @@ if (!function_exists('url')) {
                 $vars = [];
             }
 
-            return (string) Route::buildUrl($url, $vars)->suffix($suffix)->domain($domain);
+            // 手动构建URL
+            $urlPath = $baseFile . '/' . $url;
+            if (!empty($vars)) {
+                $urlPath .= '?' . http_build_query($vars);
+            }
+            return $urlPath;
         }
 
         // 如果只是方法名，需要补充模块和控制器信息
-        $request = Request::instance();
-
-        // 获取当前请求的完整路径（多种方式）
         $pathInfo = $request->pathinfo();
-        $urlPath = $request->url();
-        $baseFile = $request->baseFile();
-
-        // 调试信息（可以删除）
-        // echo "pathInfo: {$pathInfo}<br>";
-        // echo "url: {$urlPath}<br>";
-        // echo "baseFile: {$baseFile}<br>";
-
         $parts = explode('/', trim($pathInfo, '/'));
 
-        // 获取当前模块、控制器和动作
+        // 获取当前模块、控制器
         $module = '';
         $controller = '';
 
-        // 从路径中解析模块和控制器
         if (count($parts) >= 1) {
             $module = $parts[0];
         }
@@ -691,24 +687,18 @@ if (!function_exists('url')) {
             $controller = $parts[1];
         }
 
-        // 构建完整的URL路径（只替换最后一个动作名）
-        $fullUrl = "{$module}/{$controller}/{$url}";
+        // 手动构建完整的URL路径
+        $urlPath = $baseFile . '/' . $module . '/' . $controller . '/' . $url;
 
-        // 将字符串参数转换为数组
+        // 添加参数
         if (is_string($vars) && !empty($vars)) {
             parse_str($vars, $vars);
         }
-        if ($vars === '') {
-            $vars = [];
+        if ($vars !== '' && !empty($vars)) {
+            $urlPath .= '?' . http_build_query($vars);
         }
 
-        // 生成URL
-        $result = (string) Route::buildUrl($fullUrl, $vars)->suffix($suffix)->domain($domain);
-
-         echo "fullUrl: {$fullUrl}<br>";
-         echo "result: {$result}<br>";
-
-        return $result;
+        return $urlPath;
     }
 }
 

@@ -130,6 +130,11 @@ abstract class BaseController
      */
     protected function fetch($template = '', $vars = [], $config = [])
     {
+        // 如果模板路径是绝对路径，直接使用
+        if (!empty($template) && file_exists($template)) {
+            return View::fetch($template, $vars, $config);
+        }
+
         // 获取当前模块名
         $pathInfo = $this->request->pathinfo();
         $parts = explode('/', trim($pathInfo, '/'));

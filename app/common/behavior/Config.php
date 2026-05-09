@@ -139,21 +139,26 @@ class Config
 
         // 设置配置信息
         if (!empty($system_config)) {
-            // 获取现有的 app 配置
-            $existingAppConfig = config('app.');
-            // 合并配置，确保不覆盖数组类型的配置项
+            // 定义不允许被数据库配置覆盖的核心配置项
+            $protectedKeys = ['app', 'template', 'database', 'cache', 'route', 'log', 'session', 'cookie'];
+            
             foreach ($system_config as $key => $value) {
-                // 检查现有配置是否为数组
-                if (isset($existingAppConfig[$key]) && is_array($existingAppConfig[$key])) {
-                    // 如果现有配置是数组，且新值也是数组，则合并
-                    if (is_array($value)) {
-                        config($key, array_merge($existingAppConfig[$key], $value));
-                    }
-                    // 如果新值不是数组，保留原有数组配置
-                } else {
+                // 跳过核心配置项
+                if (in_array($key, $protectedKeys)) {
+                    continue;
+                }
+                
+                // 获取现有的配置
+                $existingConfig = config($key);
+                
+                // 如果现有配置是数组，且新值也是数组，则合并
+                if (is_array($existingConfig) && is_array($value)) {
+                    config($key, array_merge($existingConfig, $value));
+                } else if ($existingConfig === null || !is_array($existingConfig)) {
                     // 如果现有配置不存在或不是数组，则设置新值
                     config($key, $value);
                 }
+                // 如果现有配置是数组但新值不是，保留原有数组配置
             }
         }
     }

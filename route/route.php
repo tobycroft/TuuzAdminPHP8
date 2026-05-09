@@ -1,5 +1,7 @@
 <?php
 
+use think\facade\App;
+
 // 辅助函数：查找控制器类
 function findController($module, $controller) {
     // 尝试1：大驼峰命名（PSR-4标准）
@@ -41,8 +43,10 @@ function findController($module, $controller) {
         return abort(404, 'Controller not found: '.ucfirst($controller));
     }
 
+    // 使用容器创建控制器实例（支持依赖注入）
+    $instance = App::make($class);
+
     // 调用方法
-    $instance = new $class();
     if (!method_exists($instance, $function)) {
         return abort(404, 'Method not found: '.$function);
     }
@@ -68,8 +72,10 @@ function findController($module, $controller) {
         return abort(404, 'Controller not found: '.ucfirst($controller));
     }
 
+    // 使用容器创建控制器实例（支持依赖注入）
+    $instance = App::make($class);
+
     // 调用index方法
-    $instance = new $class();
     if (!method_exists($instance, 'index')) {
         return abort(404, 'Method index not found');
     }
@@ -95,8 +101,10 @@ function findController($module, $controller) {
         return abort(404, 'Controller Index not found');
     }
 
+    // 使用容器创建控制器实例（支持依赖注入）
+    $instance = App::make($class);
+
     // 调用index方法
-    $instance = new $class();
     if (!method_exists($instance, 'index')) {
         return abort(404, 'Method index not found');
     }

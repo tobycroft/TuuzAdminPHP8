@@ -516,7 +516,12 @@ if (!function_exists('redirect')) {
             $params = [];
         }
 
-        return Response::create($url, 'redirect', $code)->params($params);
+        // ThinkPHP 8 重定向传参使用 with 而不是 params
+        $redirect = Response::create($url, 'redirect', $code);
+        if (!empty($params)) {
+            $redirect->with($params);
+        }
+        return $redirect;
     }
 }
 

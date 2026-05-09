@@ -16,6 +16,10 @@ use think\helper\Hash;
  */
 class Index extends Admin
 {
+
+    public function test(){
+        return "aaa";
+    }
     /**
      * 后台首页
      * @return string

@@ -62,7 +62,7 @@ class Attachment extends Admin
                 ['type', '类型'],
                 ['name', '名称'],
                 ['size', '大小', 'byte'],
-                ['driver', '上传驱动', parse_attr(Db::name('admin_config')->where('name', 'upload_driver')->value('options'))],
+                ['driver', '上传驱动', parse_attr((new \app\admin\model\Config)->where('name', 'upload_driver')->value('options'))],
                 ['create_time', '上传时间', 'datetime'],
                 ['status', '状态', 'switch'],
                 ['right_button', '操作', 'btn'],

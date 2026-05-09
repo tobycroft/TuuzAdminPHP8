@@ -463,7 +463,7 @@ class Admin extends Common
                 [
                     'title' => '站点开关',
                     'tips' => '站点关闭后将不能访问',
-                    'checked' => Db::name('admin_config')
+                    'checked' => (new \app\admin\model\Config)
                         ->where('id', 1)
                         ->value('value'),
                     'table' => $table_token,

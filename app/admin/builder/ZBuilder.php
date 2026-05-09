@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\common\builder;
+namespace app\admin\builder;
 
 use app\common\controller\Common;
 use think\Exception;

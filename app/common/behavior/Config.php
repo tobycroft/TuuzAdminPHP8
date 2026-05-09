@@ -72,7 +72,10 @@ class Config
 
         // 如果定义了入口为admin，则修改默认的访问控制器层
         if (defined('ENTRANCE') && ENTRANCE == 'admin') {
-            define('ADMIN_FILE', substr($base_file, strripos($base_file, '/') + 1));
+            // 修复：检查 ADMIN_FILE 是否已定义
+            if (!defined('ADMIN_FILE')) {
+                define('ADMIN_FILE', substr($base_file, strripos($base_file, '/') + 1));
+            }
 
             if ($module == '') {
                 header('Location: ' . $base_file . '/admin', true, 302);

@@ -67,7 +67,8 @@ class Builder extends ZBuilder
      */
     public function initialize()
     {
-        $this->_template = realpath(Env::get('app_path') . 'admin/builder/form/layout.html');
+        $templatePath = Env::get('app_path') . 'admin/builder/form/layout.html';
+        $this->_template = file_exists($templatePath) ? $templatePath : Env::get('app_path') . 'common/builder/form/layout.html';
         $this->_vars['post_url'] = $this->request->url(true);
         $token_name = config_old('zbuilder.form_token_name') ?: '__token__';
         $this->_vars['_token_name'] = $token_name;

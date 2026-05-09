@@ -5,6 +5,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/app" isTestSource="false" packagePrefix="app\" />
       <sourceFolder url="file://$MODULE_DIR$/extend" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/flysystem" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/mime-type-detection" />
@@ -23,6 +24,11 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-template" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-trace" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-view" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ezyang/htmlpurifier" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tobycroft/aoss-sdk" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-captcha" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-container" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-validate" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

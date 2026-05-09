@@ -22,6 +22,11 @@
       <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
       <path value="$PROJECT_DIR$/vendor/topthink/think-image" />
       <path value="$PROJECT_DIR$/vendor/tobycroft/zbuilder" />
+      <path value="$PROJECT_DIR$/vendor/tobycroft/aoss-sdk" />
+      <path value="$PROJECT_DIR$/vendor/topthink/think-validate" />
+      <path value="$PROJECT_DIR$/vendor/topthink/think-captcha" />
+      <path value="$PROJECT_DIR$/vendor/topthink/think-container" />
+      <path value="$PROJECT_DIR$/vendor/ezyang/htmlpurifier" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />

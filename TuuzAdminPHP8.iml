@@ -17,7 +17,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/framework" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-helper" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-orm" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-template" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-trace" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-view" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ezyang/htmlpurifier" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/tobycroft/aoss-sdk" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-captcha" />

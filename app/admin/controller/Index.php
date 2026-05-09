@@ -7,7 +7,6 @@ use app\common\builder\ZBuilder;
 use app\user\model\User;
 use think\facade\Cache;
 use think\facade\Env;
-use think\helper\Hash;
 
 /**
  * 后台默认控制器

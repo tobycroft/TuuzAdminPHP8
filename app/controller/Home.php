@@ -21,4 +21,13 @@ class Home extends Common
             $this->error('站点已经关闭，请稍后访问~');
         }
     }
+
+    public function index()
+    {
+        // 默认跳转模块
+        if (config_old('home_default_module') != '' && config_old('home_default_module') != 'index') {
+            $this->redirect(config_old('home_default_module') . '/index/index');
+        }
+        return 'home';
+    }
 }

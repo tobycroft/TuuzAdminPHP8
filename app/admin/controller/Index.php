@@ -4,8 +4,7 @@
 namespace app\admin\controller;
 
 use app\common\builder\ZBuilder;
-use app\user\model\User as UserModel;
-use think\Db;
+use app\user\model\User;
 use think\facade\Cache;
 use think\facade\Env;
 use think\helper\Hash;
@@ -17,9 +16,11 @@ use think\helper\Hash;
 class Index extends Admin
 {
 
-    public function test(){
+    public function test()
+    {
         return "aaa";
     }
+
     /**
      * 后台首页
      * @return string

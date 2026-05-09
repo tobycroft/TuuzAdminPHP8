@@ -34,7 +34,7 @@ class Publics extends Common
 
             // 验证数据
             $result = $this->validate($data, 'User.signin');
-            if(true !== $result){
+            if (true !== $result) {
                 // 验证失败 输出错误信息
                 $this->error($result);
             }
@@ -43,7 +43,7 @@ class Publics extends Common
             if (config('captcha_signin')) {
                 $captcha = $this->request->post('captcha', '');
                 $captcha == '' && $this->error('请输入验证码');
-                if(!captcha_check($captcha, '')){
+                if (!captcha_check($captcha, '')) {
                     //验证失败
                     $this->error('验证码错误或失效');
                 };
@@ -103,7 +103,7 @@ class Publics extends Common
         role_auth();
 
         $menus = MenuModel::getSidebarMenu($default_module, $menu['module'], $menu_url[1]);
-        $url   = '';
+        $url = '';
         foreach ($menus as $key => $menu) {
             if (!empty($menu['url_value'])) {
                 $url = $menu['url_value'];

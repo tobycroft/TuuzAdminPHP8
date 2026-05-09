@@ -516,11 +516,17 @@ if (!function_exists('redirect')) {
             $params = [];
         }
 
-        // ThinkPHP 8 重定向传参使用 with 而不是 params
+        // 核心修复：强制生成 绝对URL，杜绝路径叠加死循环
+        if (is_string($url) && !empty($url) && strpos($url, 'http') !== 0) {
+            $url = url($url); // 用系统url函数生成完整绝对地址
+        }
+
+        // TP8 修复：移除不存在的 params() 方法，改用 with()
         $redirect = Response::create($url, 'redirect', $code);
         if (!empty($params)) {
             $redirect->with($params);
         }
+
         return $redirect;
     }
 }

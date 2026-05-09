@@ -51,7 +51,7 @@ class Plugin extends Admin
                 $result = $PluginModel->getAll($keyword, $status);
 
                 if ($result['plugins'] === false) {
-                    $this->error($PluginModel->getError());
+                    $this->error($PluginModel->error);
                 }
 
                 $type_show = Cache::get('plugin_type_show');

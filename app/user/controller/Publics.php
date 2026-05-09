@@ -57,7 +57,7 @@ class Publics extends Common
                 action_log('user_signin', 'admin_user', $uid, $uid);
                 $this->jumpUrl();
             } else {
-                $this->error($UserModel->getError());
+                $this->error($UserModel->error);
             }
         } else {
 

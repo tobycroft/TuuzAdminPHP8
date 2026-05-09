@@ -37,7 +37,7 @@ class Packet extends Admin
         }
 
         if ($data_list === false) {
-            $this->error($PacketModel->getError());
+            $this->error($PacketModel->error);
         }
 
         // 自定义按钮

@@ -57,7 +57,7 @@ class Module extends Admin
                 $result = $ModuleModel->getAll($keyword, $status);
 
                 if ($result['modules'] === false) {
-                    $this->error($ModuleModel->getError());
+                    $this->error($ModuleModel->error);
                 }
 
                 $type_show = Cache::get('module_type_show');

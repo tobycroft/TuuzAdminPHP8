@@ -25,8 +25,8 @@ function findController($module, $controller) {
     return false;
 }
 
-// 完整路由：支持 /admin/module/controller/function/param 格式
-\think\facade\Route::any('admin/:realModule/:controller/:function/[:param]', function ($realModule, $controller, $function, $param = '') {
+// 完整路由：支持 /module/controller/function/param 格式（适用于 admin.php 入口）
+\think\facade\Route::any(':module/:controller/:function/[:param]', function ($module, $controller, $function, $param = '') {
     // 静态资源文件扩展名
     $staticExtensions = ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'ico', 'woff', 'woff2', 'ttf', 'eot'];
 
@@ -50,18 +50,16 @@ function findController($module, $controller) {
 
     // 获取实际模块名（通过映射表）
     $moduleMap = [
-        'admin' => [
-            'index' => 'admin',
-            'user' => 'user',
-            'admin' => 'admin',
-        ]
+        'admin' => 'admin',
+        'user' => 'user',
+        'index' => 'index',
     ];
-    $module = isset($moduleMap['admin'][$realModule]) ? $moduleMap['admin'][$realModule] : $realModule;
+    $realModule = isset($moduleMap[$module]) ? $moduleMap[$module] : $module;
 
     // 查找控制器（支持多种命名方式）
-    $class = findController($module, $controller);
+    $class = findController($realModule, $controller);
     if (!$class) {
-        return abort(404, 'Controller not found: '.ucfirst($controller).' in module: '.$module);
+        return abort(404, 'Controller not found: '.ucfirst($controller).' in module: '.$realModule);
     }
 
     // 使用容器创建控制器实例（支持依赖注入）
@@ -80,8 +78,8 @@ function findController($module, $controller) {
     }
 });
 
-// 简化路由：/admin/module/controller
-\think\facade\Route::any('admin/:realModule/:controller', function ($realModule, $controller) {
+// 简化路由：/module/controller
+\think\facade\Route::any(':module/:controller', function ($module, $controller) {
     // 静态资源文件扩展名
     $staticExtensions = ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'ico', 'woff', 'woff2', 'ttf', 'eot'];
 
@@ -104,18 +102,16 @@ function findController($module, $controller) {
 
     // 获取实际模块名（通过映射表）
     $moduleMap = [
-        'admin' => [
-            'index' => 'admin',
-            'user' => 'user',
-            'admin' => 'admin',
-        ]
+        'admin' => 'admin',
+        'user' => 'user',
+        'index' => 'index',
     ];
-    $module = isset($moduleMap['admin'][$realModule]) ? $moduleMap['admin'][$realModule] : $realModule;
+    $realModule = isset($moduleMap[$module]) ? $moduleMap[$module] : $module;
 
     // 查找控制器（支持多种命名方式）
-    $class = findController($module, $controller);
+    $class = findController($realModule, $controller);
     if (!$class) {
-        return abort(404, 'Controller not found: '.ucfirst($controller).' in module: '.$module);
+        return abort(404, 'Controller not found: '.ucfirst($controller).' in module: '.$realModule);
     }
 
     // 使用容器创建控制器实例（支持依赖注入）
@@ -129,8 +125,45 @@ function findController($module, $controller) {
     return call_user_func([$instance, 'index']);
 });
 
-// 默认路由：/admin
-\think\facade\Route::any('admin', function () {
+// 默认路由：/module
+\think\facade\Route::any(':module', function ($module) {
+    // CORS处理
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Max-Age: 86400');
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: *');
+    if (\think\facade\Request::isOptions()) {
+        return false;
+    }
+
+    // 获取实际模块名（通过映射表）
+    $moduleMap = [
+        'admin' => 'admin',
+        'user' => 'user',
+        'index' => 'index',
+    ];
+    $realModule = isset($moduleMap[$module]) ? $moduleMap[$module] : $module;
+
+    // 默认访问 Index 控制器
+    $class = findController($realModule, 'Index');
+    if (!$class) {
+        return abort(404, 'Controller Index not found in module: '.$realModule);
+    }
+
+    // 使用容器创建控制器实例（支持依赖注入）
+    $instance = App::make($class);
+
+    // 调用index方法
+    if (!method_exists($instance, 'index')) {
+        return abort(404, 'Method index not found');
+    }
+
+    return call_user_func([$instance, 'index']);
+});
+
+// 根路由
+\think\facade\Route::any('/', function () {
     // CORS处理
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Max-Age: 86400');
@@ -148,79 +181,6 @@ function findController($module, $controller) {
     $class = findController($module, 'Index');
     if (!$class) {
         return abort(404, 'Controller Index not found in module: '.$module);
-    }
-
-    // 使用容器创建控制器实例（支持依赖注入）
-    $instance = App::make($class);
-
-    // 调用index方法
-    if (!method_exists($instance, 'index')) {
-        return abort(404, 'Method index not found');
-    }
-
-    return call_user_func([$instance, 'index']);
-});
-
-// 前台路由：/:controller/:function/[:param]
-\think\facade\Route::any(':controller/:function/[:param]', function ($controller, $function, $param = '') {
-    // 静态资源文件扩展名
-    $staticExtensions = ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'ico', 'woff', 'woff2', 'ttf', 'eot'];
-
-    // 检查是否是静态资源请求
-    $pathInfo = \think\facade\Request::instance()->pathinfo();
-    $extension = strtolower(pathinfo($pathInfo, PATHINFO_EXTENSION));
-    if (in_array($extension, $staticExtensions)) {
-        return abort(404);
-    }
-
-    // CORS处理
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Max-Age: 86400');
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    header('Access-Control-Allow-Headers: *');
-    if (\think\facade\Request::isOptions()) {
-        return false;
-    }
-
-    // 查找控制器（支持多种命名方式）
-    $class = findController('index', $controller);
-    if (!$class) {
-        return abort(404, 'Controller not found: '.ucfirst($controller));
-    }
-
-    // 使用容器创建控制器实例（支持依赖注入）
-    $instance = App::make($class);
-
-    // 调用方法（支持带参数）
-    if (!method_exists($instance, $function)) {
-        return abort(404, 'Method not found: '.$function);
-    }
-
-    // 根据参数数量调用方法
-    if ($param !== '') {
-        return call_user_func([$instance, $function], $param);
-    } else {
-        return call_user_func([$instance, $function]);
-    }
-});
-
-// 前台默认路由
-\think\facade\Route::any('/', function () {
-    // CORS处理
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Max-Age: 86400');
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    header('Access-Control-Allow-Headers: *');
-    if (\think\facade\Request::isOptions()) {
-        return false;
-    }
-
-    // 查找Index控制器
-    $class = findController('index', 'Index');
-    if (!$class) {
-        return abort(404, 'Controller Index not found');
     }
 
     // 使用容器创建控制器实例（支持依赖注入）

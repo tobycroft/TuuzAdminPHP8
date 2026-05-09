@@ -592,16 +592,9 @@
             });
         });
         App.initHelpers(['appear', 'slimscroll', 'magnific-popup', 'table-tools']);
-        {
-            notempty
-            name = "_js_init"
-        }
-        App.initHelpers({$_js_init | raw
-    })
-        ;
-        {
-            /notempty}
-        }
+        {notempty name="_js_init"}
+        App.initHelpers({$_js_init|raw});
+        {/notempty}
     )
         ;
 </script>

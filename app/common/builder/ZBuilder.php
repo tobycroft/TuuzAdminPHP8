@@ -31,7 +31,8 @@ class ZBuilder extends Common
      * 初始化
      */
     public function initialize()
-    {}
+    {
+    }
 
     /**
      * 创建各种builder的入口
@@ -49,7 +50,7 @@ class ZBuilder extends Common
         }
 
         // 构造器类路径
-        $class = '\\app\\common\\builder\\'. $type .'\\Builder';
+        $class = '\\app\\common\\builder\\' . $type . '\\Builder';
         if (!class_exists($class)) {
             throw new Exception($type . '构建器不存在', 8002);
         }
@@ -60,14 +61,15 @@ class ZBuilder extends Common
             static::$action = '';
         }
 
-        return new $class;
+        // ✅ 这一行修复：传入 app() 参数
+        return new $class(app());
     }
 
     /**
      * 加载模板输出
      * @param string $template 模板文件名
-     * @param array  $vars     模板输出变量
-     * @param array  $config   模板参数
+     * @param array $vars 模板输出变量
+     * @param array $config 模板参数
      * @return mixed
      */
     public function fetch($template = '', $vars = [], $config = [])

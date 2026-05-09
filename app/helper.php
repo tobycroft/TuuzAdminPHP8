@@ -208,7 +208,8 @@ if (!function_exists('config')) {
     {
         if (is_null($value) && is_string($name)) {
             if ('.' == substr($name, -1)) {
-                return Config::pull(substr($name, 0, -1));
+                $config = Config::pull(substr($name, 0, -1));
+                return is_array($config) ? $config : [];
             }
 
             return 0 === strpos($name, '?') ? Config::has(substr($name, 1)) : Config::get($name);

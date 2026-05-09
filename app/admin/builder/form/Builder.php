@@ -215,7 +215,7 @@ class Builder extends ZBuilder
     public function setToken($name = '__token__', $type = 'md5')
     {
         $this->_vars['_token_name'] = $name === '' ? '__token__' : $name;
-        $this->_vars['_token_value'] = $this->request->token($this->_vars['_token_name'], $type);
+        $this->_vars['_token_value'] = token($this->_vars['_token_name'], $type);
         return $this;
     }
 

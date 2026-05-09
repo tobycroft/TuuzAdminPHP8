@@ -8,6 +8,7 @@ use think\App;
 use think\exception\ValidateException;
 use think\facade\Config;
 use think\facade\Db;
+use think\facade\View;
 use think\Validate;
 
 /**
@@ -98,6 +99,30 @@ abstract class BaseController
         }
 
         return $v->failException(true)->check($data);
+    }
+
+    /**
+     * 模板变量赋值（兼容 ThinkPHP 5）
+     * @param mixed $name 变量名或数组
+     * @param mixed $value 变量值
+     * @return $this
+     */
+    protected function assign($name, $value = '')
+    {
+        View::assign($name, $value);
+        return $this;
+    }
+
+    /**
+     * 渲染模板输出（兼容 ThinkPHP 5）
+     * @param string $template 模板文件名
+     * @param array $vars 模板变量
+     * @param array $config 模板配置
+     * @return mixed
+     */
+    protected function fetch($template = '', $vars = [], $config = [])
+    {
+        return View::fetch($template, $vars, $config);
     }
 
 }

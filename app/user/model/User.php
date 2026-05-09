@@ -5,7 +5,6 @@ namespace app\user\model;
 
 use app\user\model\Role as RoleModel;
 use think\Db;
-use think\helper\Hash;
 use think\Model;
 
 /**
@@ -20,10 +19,10 @@ class User extends Model
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
 
-    // 对密码进行加密
+    // 对密码进行加密（修复：使用 PHP 内置的 password_hash）
     public function setPasswordAttr($value)
     {
-        return Hash::make((string)$value);
+        return password_hash((string)$value, PASSWORD_DEFAULT);
     }
 
     // 获取注册ip
@@ -73,7 +72,8 @@ class User extends Model
                 $this->error = '禁止访问，用户所在角色未启用或禁止访问后台！';
                 return false;
             }
-            if (!Hash::check((string)$password, $user['password'])) {
+            // 修复：使用 PHP 内置的 password_verify
+            if (!password_verify((string)$password, $user['password'])) {
                 $this->error = '账号或者密码错误！';
             } else {
                 $uid = $user['id'];

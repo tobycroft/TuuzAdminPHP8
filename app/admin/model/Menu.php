@@ -212,7 +212,7 @@ class Menu extends Model
      */
     public static function getLocation($id = '', $del_last_url = false, $check = true)
     {
-        $model = app('http')->getName();
+        $model = request()->module();
         $controller = request()->controller();
         $action = request()->action();
 
@@ -229,18 +229,17 @@ class Menu extends Model
                 ['pid', '<>', 0],
                 ['url_value', '=', strtolower($model . '/' . trim(preg_replace("/[A-Z]/", "_\\0", $controller), "_") . '/' . $action)]
             ];
-            var_dump(strtolower($model . '/' . trim(preg_replace('/[A-Z]/', "_\\0", $controller), '_') . '/' . $action));
+
             // 当前操作对应的节点ID
             $curr_id = $id == '' ? self::where($map)
                 ->value('id') : $id;
 
             // 获取节点ID是所有父级节点
-            $location = Tree::getParents(self::column('id,pid,title,url_value,params'), $curr_id);
+            $location = !empty($curr_id) ? Tree::getParents(self::column('id,pid,title,url_value,params'), $curr_id) : [];
 
-            var_dump($location);
-
+            // 如果找不到节点，不抛出异常，返回空数组（可能是新安装或未配置菜单）
             if ($check && empty($location)) {
-                throw new Exception('获取不到当前节点地址，可能未添加节点', 9001);
+                return [];
             }
 
             // 剔除最后一个节点url

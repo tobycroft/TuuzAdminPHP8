@@ -50,9 +50,9 @@ class Admin extends Common
 
         $Model = $this->getCurrModel();
         $protect_table = [
-            '__ADMIN_USER__',
-            '__ADMIN_ROLE__',
-            '__ADMIN_MODULE__',
+            'admin_user',
+            'admin_role',
+            'admin_module',
             config_old('database.prefix') . 'admin_user',
             config_old('database.prefix') . 'admin_role',
             config_old('database.prefix') . 'admin_module',
@@ -177,8 +177,8 @@ class Admin extends Common
 
         $Model = $this->getCurrModel();
         $protect_table = [
-            '__ADMIN_USER__',
-            '__ADMIN_ROLE__',
+            'admin_user',
+            'admin_role',
             config_old('database.prefix') . 'admin_user',
             config_old('database.prefix') . 'admin_role',
         ];

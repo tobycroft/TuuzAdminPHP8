@@ -666,6 +666,13 @@ if (!function_exists('url')) {
         
         // 如果只是方法名，需要补充模块和控制器信息
         $request = Request::instance();
+        
+        // 优先从路由参数中获取模块和控制器
+        $routeModule = $request->param('module', '');
+        $routeController = $request->param('controller', '');
+        $routeRealModule = $request->param('realModule', '');
+        
+        // 从pathinfo中解析
         $pathInfo = $request->pathinfo();
         $parts = explode('/', trim($pathInfo, '/'));
         
@@ -673,8 +680,19 @@ if (!function_exists('url')) {
         $module = '';
         $controller = '';
         
-        if (count($parts) >= 2) {
+        // 优先使用路由参数
+        if (!empty($routeRealModule)) {
+            $module = $routeRealModule;
+        } elseif (!empty($routeModule)) {
+            $module = $routeModule;
+        } elseif (count($parts) >= 1) {
             $module = $parts[0];
+        }
+        
+        // 获取控制器
+        if (!empty($routeController)) {
+            $controller = $routeController;
+        } elseif (count($parts) >= 2) {
             $controller = $parts[1];
         }
         

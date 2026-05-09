@@ -114,7 +114,7 @@ abstract class BaseController
     }
 
     /**
-     * 渲染模板输出（兼容 ThinkPHP 5）
+     * 渲染模板输出（兼容 ThinkPHP 5，支持自定义路由）
      * @param string $template 模板文件名
      * @param array $vars 模板变量
      * @param array $config 模板配置
@@ -122,44 +122,63 @@ abstract class BaseController
      */
     protected function fetch($template = '', $vars = [], $config = [])
     {
-        // 调试模式：输出实际的模板路径
-        if (true) { // 强制开启调试，调试完成后改为 false
-            // 获取当前请求信息
+        // 如果没有指定模板名，自动根据URL解析
+        if (empty($template)) {
+            // 获取当前请求路径
             $pathInfo = $this->request->pathinfo();
-            $controller = $this->request->controller();
-            $action = $this->request->action();
 
-            // 构建可能的模板路径
-            $possiblePaths = [
-                // 方式1：基于当前请求的控制器和方法
-                "app/view/{$controller}/{$action}.html",
-                // 方式2：admin模块下的视图
-                "app/admin/view/{$controller}/{$action}.html",
-                // 方式3：user模块下的视图
-                "app/user/view/{$controller}/{$action}.html",
-                // 方式4：如果指定了模板名
-                (!empty($template) ? "app/view/{$template}.html" : ''),
-                (!empty($template) ? "app/admin/view/{$template}.html" : ''),
-                (!empty($template) ? "app/user/view/{$template}.html" : ''),
+            // 解析 URL 路径
+            // 格式: admin/module/controller/action 或 admin/controller/action
+            $parts = explode('/', trim($pathInfo, '/'));
+
+            // 模块映射表
+            $moduleMap = [
+                'admin' => 'admin',
+                'user' => 'user',
             ];
 
-            // 输出调试信息
-            echo '<pre>';
-            echo "当前请求路径: {$pathInfo}\n";
-            echo "控制器: {$controller}\n";
-            echo "方法: {$action}\n";
-            echo "传入的模板名: '" . ($template ?: '空') . "'\n";
-            echo "\n可能的模板路径:\n";
-            foreach ($possiblePaths as $path) {
-                if (!empty($path)) {
-                    $fullPath = $this->app->getRootPath() . $path;
-                    $exists = file_exists($fullPath) ? '✓ 存在' : '✗ 不存在';
-                    echo "  {$path} [{$exists}]\n";
+            // 确定实际模块、控制器和方法
+            $module = 'admin';  // 默认模块
+            $controller = 'Index';
+            $action = 'index';
+
+            if (count($parts) >= 2) {
+                // URL 格式: admin/controller/action
+                if (isset($moduleMap[$parts[1]])) {
+                    // URL 格式: admin/module/controller/action
+                    $module = $moduleMap[$parts[1]];
+                    $controller = isset($parts[2]) ? $parts[2] : 'Index';
+                    $action = isset($parts[3]) ? $parts[3] : 'index';
+                } else {
+                    // URL 格式: admin/controller/action
+                    $controller = $parts[1];
+                    $action = isset($parts[2]) ? $parts[2] : 'index';
                 }
             }
-            echo '</pre>';
+
+            // 将控制器名转换为大驼峰命名
+            $controller = ucfirst($controller);
+
+            // 构建模板路径
+            $templatePath = $this->app->getAppPath() . "{$module}/view/{$controller}/{$action}.html";
+
+            // 检查模板文件是否存在
+            if (file_exists($templatePath)) {
+                $template = $templatePath;
+            } else {
+                // 尝试小写控制器名
+                $controllerLower = strtolower($controller);
+                $templatePathLower = $this->app->getAppPath() . "{$module}/view/{$controllerLower}/{$action}.html";
+                if (file_exists($templatePathLower)) {
+                    $template = $templatePathLower;
+                } else {
+                    // 如果都不存在，返回错误信息
+                    return "<pre>模板文件不存在！\n\n尝试的路径：\n- {$templatePath}\n- {$templatePathLower}</pre>";
+                }
+            }
         }
 
+        // 调用视图引擎渲染模板
         return View::fetch($template, $vars, $config);
     }
 

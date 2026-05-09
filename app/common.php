@@ -1505,12 +1505,26 @@ if (!function_exists('dp_send_message')) {
 
 function config_old($key, $default = '')
 {
-    $appConfig = Config::get('app');
+    // 使用安全的方式获取配置，避免直接调用 Config::get() 导致类型错误
+    try {
+        $appConfig = Config::get('app');
+    } catch (\TypeError $e) {
+        $appConfig = [];
+    }
+    if (!is_array($appConfig)) {
+        $appConfig = [];
+    }
+    
     // 检查 tp 配置是否存在且为数组
-    $tpConfig = Config::has('tp') ? Config::get('tp') : [];
+    try {
+        $tpConfig = Config::has('tp') ? Config::get('tp') : [];
+    } catch (\TypeError $e) {
+        $tpConfig = [];
+    }
     if (!is_array($tpConfig)) {
         $tpConfig = [];
     }
+    
     $config = array_merge($appConfig, $tpConfig);
     return isset($config[$key]) ? $config[$key] : $default;
 }

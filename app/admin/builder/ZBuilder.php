@@ -49,8 +49,14 @@ class ZBuilder extends Common
             $type = strtolower($type);
         }
 
-        // 构造器类路径
+        // 构造器类路径 - 先检查 admin 目录
         $class = '\\app\\admin\\builder\\' . $type . '\\Builder';
+        
+        // 如果 admin 目录下不存在，检查 common 目录
+        if (!class_exists($class)) {
+            $class = '\\app\\common\\builder\\' . $type . '\\Builder';
+        }
+        
         if (!class_exists($class)) {
             throw new Exception($type . '构建器不存在', 8002);
         }

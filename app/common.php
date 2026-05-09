@@ -1502,9 +1502,8 @@ if (!function_exists('dp_send_message')) {
     }
 }
 
-function config_old($key)
+function config_old($key, $default = '')
 {
-    return array_merge(Config::get('app'),
-        Config::get('tp')
-    )[$key];
+    $config = array_merge(Config::get('app'), Config::get('tp'));
+    return isset($config[$key]) ? $config[$key] : $default;
 }

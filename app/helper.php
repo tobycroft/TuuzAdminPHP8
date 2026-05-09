@@ -254,13 +254,13 @@ if (!function_exists('config')) {
                         return null;
                     }
                 }
-            }
-            
-            // 安全地获取配置
-            try {
-                return Config::get($name);
-            } catch (\TypeError $e) {
-                return null;
+            } else {
+                // 安全地获取配置
+                try {
+                    return Config::get($name);
+                } catch (\TypeError $e) {
+                    return null;
+                }
             }
         } else {
             // ThinkPHP 8 中 Config::set() 的参数顺序是 (array $config, ?string $name = null)

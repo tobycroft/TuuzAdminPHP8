@@ -25,8 +25,8 @@ function findController($module, $controller) {
     return false;
 }
 
-// 完整路由：/module/controller/function
-\think\facade\Route::any(':module/:controller/:function', function ($module, $controller, $function) {
+// 完整路由：支持四级路径 /module/controller/function/param
+\think\facade\Route::any(':module/:controller/:function/[:param]', function ($module, $controller, $function, $param = '') {
     // CORS处理
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Max-Age: 86400');
@@ -46,12 +46,17 @@ function findController($module, $controller) {
     // 使用容器创建控制器实例（支持依赖注入）
     $instance = App::make($class);
 
-    // 调用方法
+    // 调用方法（支持带参数）
     if (!method_exists($instance, $function)) {
         return abort(404, 'Method not found: '.$function);
     }
 
-    return call_user_func([$instance, $function]);
+    // 根据参数数量调用方法
+    if ($param !== '') {
+        return call_user_func([$instance, $function], $param);
+    } else {
+        return call_user_func([$instance, $function]);
+    }
 });
 
 // 简化路由：/module/controller

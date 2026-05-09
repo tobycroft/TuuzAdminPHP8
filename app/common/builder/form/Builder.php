@@ -893,7 +893,7 @@ class Builder extends ZBuilder
      */
     public function addImage($name = '', $title = '', $tips = '', $default = '', $size = '', $ext = '', $extra_class = '', $thumb = '', $watermark = '')
     {
-        $size = ($size != '' ? $size : config_old('upload_image_size')) * 1024;
+        $size = ($size != '' ? $size : (int)config_old('upload_image_size')) * 1024;
         $ext = $ext != '' ? $ext : config_old('upload_image_ext');
 
         $item = [
@@ -944,7 +944,7 @@ class Builder extends ZBuilder
      */
     public function addImages($name = '', $title = '', $tips = '', $default = '', $size = '', $ext = '', $extra_class = '', $thumb = '', $watermark = '')
     {
-        $size = ($size != '' ? $size : config_old('upload_image_size')) * 1024;
+        $size = ($size != '' ? $size : (int)config_old('upload_image_size')) * 1024;
         $ext = $ext != '' ? $ext : config_old('upload_image_ext');
 
         $item = [

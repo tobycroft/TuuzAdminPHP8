@@ -130,16 +130,20 @@ abstract class BaseController
      */
     protected function fetch($template = '', $vars = [], $config = [])
     {
+        // 获取当前模块名
+        $pathInfo = $this->request->pathinfo();
+        $parts = explode('/', trim($pathInfo, '/'));
+        $module = !empty($parts[0]) ? $parts[0] : 'admin';
+        
+        // 设置模块视图路径
+        View::config(['view_path' => $this->app->getAppPath() . "{$module}/view/"]);
+        
         if (!empty($template)) {
             return View::fetch($template, $vars, $config);
         }
 
         // 自动解析模板路径
-        $pathInfo = $this->request->pathinfo();
-        $parts = explode('/', trim($pathInfo, '/'));
-
         if (count($parts) >= 2) {
-            $module = $parts[0];
             $controller = isset($parts[1]) ? $parts[1] : '';
             $action = isset($parts[2]) ? $parts[2] : 'index';
 

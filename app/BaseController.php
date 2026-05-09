@@ -64,11 +64,28 @@ abstract class BaseController
             $v = new Validate();
             $v->rule($validate);
         } else {
+            // 解析验证器名称和场景
+            $scene = '';
             if (strpos($validate, '.')) {
-                // 支持场景
                 list($validate, $scene) = explode('.', $validate);
             }
-            $v = app($validate);
+
+            // 添加验证器命名空间前缀
+            $validateClass = "app\\validate\\{$validate}";
+
+            // 尝试加载验证器
+            if (class_exists($validateClass)) {
+                $v = new $validateClass();
+            } else {
+                // 如果找不到验证器类，尝试使用容器
+                try {
+                    $v = app($validate);
+                } catch (\Exception $e) {
+                    // 如果都找不到，返回错误
+                    return "验证器不存在: {$validate}";
+                }
+            }
+
             if (!empty($scene)) {
                 $v->scene($scene);
             }

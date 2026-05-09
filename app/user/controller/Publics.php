@@ -34,7 +34,7 @@ class Publics extends Common
 
             // 验证数据
             $result = $this->validate($data, 'User.signin');
-            if(true !== $result){
+            if (true !== $result) {
                 // 验证失败 输出错误信息
                 $this->error($result);
             }
@@ -43,14 +43,14 @@ class Publics extends Common
             if (config('captcha_signin')) {
                 $captcha = $this->request->post('captcha', '');
                 $captcha == '' && $this->error('请输入验证码');
-                if(!captcha_check($captcha, '')){
+                if (!captcha_check($captcha, '')) {
                     //验证失败
                     $this->error('验证码错误或失效');
                 };
             }
 
             // 登录
-            $UserModel = new UserModel ;
+            $UserModel = new UserModel;
             $uid = $UserModel->login($data['username'], $data['password'], $rememberme);
             if ($uid) {
                 // 记录行为
@@ -90,8 +90,8 @@ class Publics extends Common
             $this->success('登录成功', url('admin/index/index'));
         }
 
-        $default_module = RoleModel :: where ('id', session('user_auth.role'))->value('default_module');
-        $menu = MenuModel :: get ($default_module);
+        $default_module = RoleModel:: where('id', session('user_auth.role'))->value('default_module');
+        $menu = MenuModel:: get($default_module);
         if (!$menu) {
             $this->error('当前角色未指定默认跳转模块！');
         }
@@ -103,8 +103,8 @@ class Publics extends Common
         $menu_url = explode('/', $menu['url_value']);
         role_auth();
 
-        $menus = MenuModel :: getSidebarMenu ($default_module, $menu['module'], $menu_url[1]);
-        $url   = '';
+        $menus = MenuModel:: getSidebarMenu($default_module, $menu['module'], $menu_url[1]);
+        $url = '';
         foreach ($menus as $key => $menu) {
             if (!empty($menu['url_value'])) {
                 $url = $menu['url_value'];

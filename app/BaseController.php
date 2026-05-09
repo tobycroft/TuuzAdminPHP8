@@ -51,7 +51,7 @@ abstract class BaseController
     }
 
     /**
-     * 验证数据（适配ThinkPHP 8）
+     * 验证数据（适配ThinkPHP 8，兼容ThinkPHP 5验证器）
      * @param mixed       $data     数据
      * @param mixed       $validate 验证器名或者验证规则数组
      * @param array       $message  提示信息
@@ -66,23 +66,40 @@ abstract class BaseController
         } else {
             // 解析验证器名称和场景
             $scene = '';
+            $validateName = $validate;
             if (strpos($validate, '.')) {
-                list($validate, $scene) = explode('.', $validate);
+                list($validateName, $scene) = explode('.', $validate);
             }
 
-            // 添加验证器命名空间前缀
-            $validateClass = "app\\validate\\{$validate}";
+            // 尝试多个可能的命名空间路径
+            $possiblePaths = [
+                "app\\validate\\{$validateName}",           // app/validate/User.php
+                "app\\admin\\validate\\{$validateName}",   // app/admin/validate/User.php
+                "app\\user\\validate\\{$validateName}",   // app/user/validate/User.php
+                "validate\\{$validateName}",              // validate/User.php
+                $validateName                             // 完整类名
+            ];
 
-            // 尝试加载验证器
-            if (class_exists($validateClass)) {
-                $v = new $validateClass();
-            } else {
-                // 如果找不到验证器类，尝试使用容器
+            $v = null;
+            foreach ($possiblePaths as $classPath) {
+                if (class_exists($classPath)) {
+                    $v = new $classPath();
+                    break;
+                }
+            }
+
+            // 如果还是找不到，尝试使用容器（ThinkPHP 5 方式）
+            if (empty($v)) {
                 try {
-                    $v = app($validate);
+                    $v = app("validate.{$validateName}");
                 } catch (\Exception $e) {
-                    // 如果都找不到，返回错误
-                    return "验证器不存在: {$validate}";
+                    // 如果都找不到，尝试直接使用类名
+                    try {
+                        $v = app($validateName);
+                    } catch (\Exception $e2) {
+                        // 返回验证失败的结果
+                        return "验证器不存在: {$validate}";
+                    }
                 }
             }
 

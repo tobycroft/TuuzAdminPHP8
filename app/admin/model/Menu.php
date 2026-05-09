@@ -229,8 +229,7 @@ class Menu extends Model
                 ['pid', '<>', 0],
                 ['url_value', '=', strtolower($model . '/' . trim(preg_replace("/[A-Z]/", "_\\0", $controller), "_") . '/' . $action)]
             ];
-            var_dump(self::where($map)
-                ->value('id'));
+            var_dump(strtolower($model . '/' . trim(preg_replace('/[A-Z]/', "_\\0", $controller), '_') . '/' . $action));
             // 当前操作对应的节点ID
             $curr_id = $id == '' ? self::where($map)
                 ->value('id') : $id;

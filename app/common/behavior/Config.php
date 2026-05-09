@@ -27,14 +27,17 @@ class Config
         // 如果是安装操作，直接返回
         if (defined('BIND_MODULE') && BIND_MODULE === 'install') return;
 
-        // 路由检测
-        $dispatch = App::routeCheck()->init()->getDispatch();
-        if (is_array($dispatch)) {
-            // 获取当前模块名称
-            $module = isset($dispatch[0]) ? $dispatch[0] : '';
-        } else {
-            // 闭包路由，直接返回
-            return;
+        // 获取当前模块名称（ThinkPHP 8 方式）
+        $module = Request::instance()->param('module', '');
+
+        // 如果没有获取到模块，从路径中解析
+        if (empty($module)) {
+            $pathInfo = Request::instance()->pathinfo();
+            $parts = explode('/', trim($pathInfo, '/'));
+            if (!empty($parts)) {
+                // 第一个部分通常是模块名
+                $module = $parts[0];
+            }
         }
 
         // 获取入口目录
@@ -76,7 +79,7 @@ class Config
                 exit();
             }
 
-            if (!in_array($module, config('module.default_controller_layer'))) {
+            if (!in_array($module, config('module.default_controller_layer', []))) {
                 // 修改默认访问控制器层
                 config('url_controller_layer', 'admin');
                 // 修改视图模板路径
@@ -87,11 +90,11 @@ class Config
             config('template.tpl_replace_string.__PLUGINS__', '/plugins');
         } else {
             if ($module == 'admin') {
-                header('Location: ' . $base_dir . ADMIN_FILE . '/admin', true, 302);
+                header('Location: ' . $base_dir . (defined('ADMIN_FILE') ? ADMIN_FILE : 'admin.php') . '/admin', true, 302);
                 exit();
             }
 
-            if ($module != '' && !in_array($module, config('module.default_controller_layer'))) {
+            if ($module != '' && !in_array($module, config('module.default_controller_layer', []))) {
                 // 修改默认访问控制器层
                 config('url_controller_layer', 'home');
             }
@@ -108,20 +111,27 @@ class Config
         // 读取系统配置
         $system_config = cache('system_config');
         if (!$system_config) {
-            $ConfigModel = new ConfigModel ();
-            $system_config = $ConfigModel->getConfig();
-            // 所有模型配置
-            $module_config = ModuleModel::where('config', 'neq', '')->column('config', 'name');
-            foreach ($module_config as $module_name => $config) {
-                $system_config[strtolower($module_name) . '_config'] = json_decode($config, true);
-            }
-            // 非开发模式，缓存系统配置
-            if ($system_config['develop_mode'] == 0) {
-                cache('system_config', $system_config);
+            try {
+                $ConfigModel = new ConfigModel ();
+                $system_config = $ConfigModel->getConfig();
+                // 所有模型配置
+                $module_config = ModuleModel::where('config', 'neq', '')->column('config', 'name');
+                foreach ($module_config as $module_name => $config) {
+                    $system_config[strtolower($module_name) . '_config'] = json_decode($config, true);
+                }
+                // 非开发模式，缓存系统配置
+                if (isset($system_config['develop_mode']) && $system_config['develop_mode'] == 0) {
+                    cache('system_config', $system_config);
+                }
+            } catch (\Exception $e) {
+                // 如果数据库连接失败，使用默认配置
+                $system_config = [];
             }
         }
 
         // 设置配置信息
-        config($system_config, 'app');
+        if (!empty($system_config)) {
+            config($system_config, 'app');
+        }
     }
 }

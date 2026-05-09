@@ -26,7 +26,7 @@ class Index extends Admin
      */
     public function index()
     {
-        $admin_pass = Db::name('admin_user')
+        $admin_pass = (new User())
             ->where('id', 1)
             ->value('password');
 

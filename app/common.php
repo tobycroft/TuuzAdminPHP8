@@ -140,7 +140,7 @@ if (!function_exists('get_avatar')) {
      */
     function get_avatar($uid = 0)
     {
-        $avatar = Db::name('admin_user')->where('id', $uid)->value('avatar');
+        $avatar = (new User())->where('id', $uid)->value('avatar');
         $path = model('admin/attachment')->getFilePath($avatar);
         if (!$path) {
             return config_old('public_static_path') . 'admin/img/avatar.jpg';

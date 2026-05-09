@@ -272,7 +272,7 @@ class Ajax extends Common
             $this->error('请先登录');
         }
 
-        $user = Db::name('admin_user')->where('id', session('user_auth.uid'))->find();
+        $user = (new User())->where('id', session('user_auth.uid'))->find();
         !$user && $this->error('获取失败');
 
         $roles = [$user['role']];
@@ -304,7 +304,7 @@ class Ajax extends Common
         $id == '' && $this->error('请选择要设置的角色');
 
         // 读取当前用户能设置的角色
-        $user = Db::name('admin_user')->where('id', session('user_auth.uid'))->find();
+        $user = (new User())->where('id', session('user_auth.uid'))->find();
         !$user && $this->error('设置失败');
 
         $roles = [$user['role']];

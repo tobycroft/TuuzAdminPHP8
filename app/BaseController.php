@@ -2,14 +2,11 @@
 
 namespace app;
 
-use think\exception\ValidateException;
-use think\facade\Config;
-use think\facade\Db;
 use think\facade\View;
 use think\Validate;
+use traits\controller\Jump;
 
 // 使用 Jump trait
-use traits\controller\Jump;
 
 /**
  * 控制器基础类
@@ -52,10 +49,10 @@ abstract class BaseController
 
     /**
      * 验证数据（适配ThinkPHP 8，兼容ThinkPHP 5验证器）
-     * @param mixed       $data     数据
-     * @param mixed       $validate 验证器名或者验证规则数组
-     * @param array       $message  提示信息
-     * @param bool        $batch    是否批量验证
+     * @param mixed $data 数据
+     * @param mixed $validate 验证器名或者验证规则数组
+     * @param array $message 提示信息
+     * @param bool $batch 是否批量验证
      * @return mixed
      */
     protected function validate($data, $validate, $message = [], $batch = false)
@@ -118,7 +115,7 @@ abstract class BaseController
     /**
      * 模板变量赋值
      * @param string|array $name 变量名
-     * @param mixed        $value 变量值
+     * @param mixed $value 变量值
      */
     protected function assign($name, $value = '')
     {
@@ -128,8 +125,8 @@ abstract class BaseController
     /**
      * 渲染模板
      * @param string $template 模板文件
-     * @param array  $vars     模板变量
-     * @param array  $config   模板配置
+     * @param array $vars 模板变量
+     * @param array $config 模板配置
      */
     protected function fetch($template = '', $vars = [], $config = [])
     {

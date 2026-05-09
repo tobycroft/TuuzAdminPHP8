@@ -23,14 +23,15 @@ class Builder extends ZBuilder
 
     /**
      * 架构函数
+     * @param \think\App $app
      */
-    public function __construct()
+    public function __construct(\think\App $app)
     {
         // 如果动作为new，则重新创建侧栏内容
         if (static::$action == 'new') {
             static::$vars['aside'] = [];
         }
-        parent::__construct();
+        parent::__construct($app);
     }
 
     /**

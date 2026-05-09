@@ -477,15 +477,13 @@ if (!function_exists('model')) {
             return new \think\Model();
         }
 
-        // 解析类命名空间
-        $name = parse_name($name, 1);
-        
         // 处理模块/模型写法，如 user/role
         if (strpos($name, '/')) {
             list($module, $model) = explode('/', $name, 2);
-            $class = 'app\\' . $module . '\\' . $layer . '\\' . $model;
+            // 模块名和层名保持小写，模型名首字母大写
+            $class = 'app\\' . strtolower($module) . '\\' . strtolower($layer) . '\\' . parse_name($model, 1);
         } else {
-            $class = 'app\\' . $layer . '\\' . $name;
+            $class = 'app\\' . strtolower($layer) . '\\' . parse_name($name, 1);
         }
 
         // 实例化模型

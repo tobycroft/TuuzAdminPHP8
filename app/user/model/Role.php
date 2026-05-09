@@ -5,6 +5,7 @@ namespace app\user\model;
 
 use app\admin\model\Menu as MenuModel;
 use think\Model;
+use util\Tree;
 
 /**
  * 角色模型
@@ -39,7 +40,7 @@ class Role extends Model
      */
     public static function getTree($id = null, $default = '', $filter = null)
     {
-        $result[0]       = '顶级角色';
+        $result[0] = '顶级角色';
         $where = [['status', '=', 1]];
 
         // 排除指定菜单及其子菜单
@@ -66,7 +67,7 @@ class Role extends Model
 
         // 获取菜单
         $roles = self::where($where)->column('id,pid,name');
-        $pid   = self::where($where)->order('pid')->value('pid');
+        $pid = self::where($where)->order('pid')->value('pid');
         $roles = Tree::config(['title' => 'name'])->toList($roles, $pid);
         foreach ($roles as $role) {
             $result[$role['id']] = $role['title_display'];
@@ -125,7 +126,7 @@ class Role extends Model
             }
             // 获取当前操作的id
             $location = MenuModel::getLocation();
-            $action   = end($location);
+            $action = end($location);
 
             return $url === false ? isset($menu_auth[$action['id']]) : in_array($action['url_value'], $menu_auth);
         }
@@ -140,7 +141,7 @@ class Role extends Model
      */
     public function roleAuth()
     {
-        $menu_auth = cache('role_menu_auth_'.session('user_auth.role'));
+        $menu_auth = cache('role_menu_auth_' . session('user_auth.role'));
         if (!$menu_auth) {
             $menu_auth = self::where('id', session('user_auth.role'))->value('menu_auth');
             $menu_auth = json_decode($menu_auth, true);
@@ -148,7 +149,7 @@ class Role extends Model
         }
         // 非开发模式，缓存数据
         if (config('develop_mode') == 0) {
-            cache('role_menu_auth_'.session('user_auth.role'), $menu_auth);
+            cache('role_menu_auth_' . session('user_auth.role'), $menu_auth);
         }
         return $menu_auth;
     }
@@ -162,9 +163,9 @@ class Role extends Model
     public static function getRoleWithMenu($menu_id = '', $menu_auth = false)
     {
         if ($menu_auth) {
-            return self::where('menu_auth', 'like', '%"'.$menu_id.'"%')->column('id,menu_auth');
+            return self::where('menu_auth', 'like', '%"' . $menu_id . '"%')->column('id,menu_auth');
         } else {
-            return self::where('menu_auth', 'like', '%"'.$menu_id.'"%')->column('id');
+            return self::where('menu_auth', 'like', '%"' . $menu_id . '"%')->column('id');
         }
     }
 

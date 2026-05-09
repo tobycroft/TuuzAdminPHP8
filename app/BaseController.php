@@ -135,14 +135,8 @@ abstract class BaseController
         $parts = explode('/', trim($pathInfo, '/'));
         $module = !empty($parts[0]) ? $parts[0] : 'admin';
         
-        // 设置多个视图路径
-        $viewPaths = [
-            $this->app->getAppPath() . "{$module}/view/",
-            $this->app->getAppPath() . "common/builder/aside/",
-            $this->app->getAppPath() . "common/builder/aside/blocks/",
-        ];
-        
-        View::config(['view_path' => $viewPaths]);
+        // 设置模块视图路径
+        View::config(['view_path' => $this->app->getAppPath() . "{$module}/view/"]);
         
         if (!empty($template)) {
             return View::fetch($template, $vars, $config);

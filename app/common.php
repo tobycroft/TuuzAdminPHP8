@@ -1049,7 +1049,7 @@ if (!function_exists('action_log')) {
             if (strpos($action, '.')) {
                 list($module, $action) = explode('.', $action);
             } else {
-                $module = request()->module();
+                $module = ;
             }
 
             // 查询行为,判断是否执行

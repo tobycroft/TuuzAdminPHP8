@@ -159,7 +159,7 @@ class Menu extends Model
      */
     public static function getSidebarMenu($id = '', $module = '', $controller = '')
     {
-        $module = $module == '' ? request()->module() : $module;
+        $module = $module == '' ?  : $module;
         $controller = $controller == '' ? request()->controller() : $controller;
         $cache_tag = strtolower('_sidebar_menus_' . $module . '_' . $controller) . '_role_' . session('user_auth.role');
         $menus = cache($cache_tag);
@@ -212,7 +212,7 @@ class Menu extends Model
      */
     public static function getLocation($id = '', $del_last_url = false, $check = true)
     {
-        $model = request()->module();
+        $model = app('http')->getName();
         $controller = request()->controller();
         $action = request()->action();
 

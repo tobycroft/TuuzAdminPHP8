@@ -45,7 +45,7 @@ class Module extends Model
      */
     public static function getConfig($name = '', $item = '')
     {
-        $name = $name == '' ? request()->module() : $name;
+        $name = $name == '' ?  : $name;
 
         $config = cache('module_config_' . $name);
         if (!$config) {

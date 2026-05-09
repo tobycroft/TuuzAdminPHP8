@@ -235,7 +235,7 @@ class Menu extends Model
                 ->value('id') : $id;
 
             // 获取节点ID是所有父级节点
-            $location = Tree::getParents(self::column('id,pid,title,url_value,params'), $curr_id);
+            $location = Tree::getParents(self::column('id,pid,title,url_value,params')->toArray(), $curr_id);
 
             var_dump($location);
 

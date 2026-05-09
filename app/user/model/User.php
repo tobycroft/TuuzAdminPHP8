@@ -80,7 +80,7 @@ class User extends Model
 
                 // 更新登录信息
                 $user['last_login_time'] = request()->time();
-                $user['last_login_ip'] = request()->ip(1);
+                $user['last_login_ip'] = request()->ip();
                 if ($user->save()) {
                     // 自动登录（修复：ThinkPHP 8 中 get() 只能接受字符串，使用 find()）
                     return $this->autoLogin($this->find($uid), $rememberme);

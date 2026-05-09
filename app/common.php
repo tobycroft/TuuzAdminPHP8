@@ -1505,6 +1505,12 @@ if (!function_exists('dp_send_message')) {
 
 function config_old($key, $default = '')
 {
-    $config = array_merge(Config::get('app'), Config::get('tp'));
+    $appConfig = Config::get('app');
+    // 检查 tp 配置是否存在且为数组
+    $tpConfig = Config::has('tp') ? Config::get('tp') : [];
+    if (!is_array($tpConfig)) {
+        $tpConfig = [];
+    }
+    $config = array_merge($appConfig, $tpConfig);
     return isset($config[$key]) ? $config[$key] : $default;
 }

@@ -84,8 +84,8 @@ class Index extends Admin
                 unset($data['password']);
             }
 
-            $UserModel = new UserModel();
-            if ($user = $UserModel->allowField(['nickname', 'email', 'password', 'mobile', 'avatar'])
+            $User = new User();
+            if ($user = $User->allowField(['nickname', 'email', 'password', 'mobile', 'avatar'])
                 ->update($data)) {
                 // 记录行为
                 action_log('user_edit', 'admin_user', UID, UID, get_nickname(UID));
@@ -96,7 +96,7 @@ class Index extends Admin
         }
 
         // 获取数据
-        $info = UserModel::where('id', UID)
+        $info = User::where('id', UID)
             ->field('password', true)
             ->find();
 
